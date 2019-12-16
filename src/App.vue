@@ -18,6 +18,14 @@
             <v-list-item-title>Lançamentos</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+          <v-list-item to="/bancos">
+          <v-list-item-action>
+            <v-icon>mdi-bank</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title >Bancos</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
         <v-list-item to="/contas">
           <v-list-item-action>
             <v-icon>mdi-bank</v-icon>

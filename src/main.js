@@ -10,6 +10,10 @@ Vue.prototype.$http = axios
 
 Vue.config.productionTip = false
 
+import VueTheMask from 'vue-the-mask'
+Vue.use(VueTheMask)
+
+
 new Vue({
   store,
   router,
