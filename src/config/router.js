@@ -10,6 +10,8 @@ import Bancos from '@/pages/bancos/Bancos'
 import CadastrosBancos from '@/pages/bancos/Cadastros'
 import Lancamentos from '@/pages/lancamentos/Lancamentos'
 import CadastrosLancamentos from '@/pages/lancamentos/Cadastros'
+import Titulos from '@/pages/titulos/Titulos'
+import CadastrosTitulos from '@/pages/titulos/Cadastros'
 
 
 Vue.use(VueRouter);
@@ -78,6 +80,21 @@ const routes = [
         name: 'Editar Lancamentos',
         path: '/lancamentos/editar/:id',
         component: CadastrosLancamentos
+    },
+
+    {
+        path: '/titulos',
+        component: Titulos
+    },
+    {
+        name: 'Cadastrar titulo',
+        path: '/titulos/cadastro',
+        component: CadastrosTitulos
+    },
+    {
+        name: 'Editar Titulos',
+        path: '/titulos/editar/:id',
+        component: CadastrosTitulos
     },
    
 ]

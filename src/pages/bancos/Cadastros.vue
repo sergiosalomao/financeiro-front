@@ -29,7 +29,7 @@ export default {
     atualizar() {
       const id = this.banco.id ? this.banco.id : "";
       const method = this.banco.id ? "put" : "post";
-      const url = `${urlApi}/api/bancos/${id}`;
+      const url = `${urlApi}bancos/${id}`;
       this.$http[method](url, this.banco).then(() => {
         this.$store.dispatch('setAlert',{show: true, mensagem:'Operação realizada com sucesso',type:'success'})
         this.$router.push({ path: `/bancos/` });
@@ -37,7 +37,7 @@ export default {
     },
     getDados(id) {
       this.$http
-        .get(`${urlApi}/api/bancos/${id}`)
+        .get(`${urlApi}bancos/${id}`)
         .then(res => {
           this.banco = res.data;
         })

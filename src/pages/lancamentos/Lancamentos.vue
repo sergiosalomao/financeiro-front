@@ -77,6 +77,7 @@
           <template v-slot:item.tipo="{ item }">
             <v-chip :color="getColor(item.tipo)" dark>{{ item.tipo }}</v-chip>
           </template>
+
           <template v-slot:item.action="{ item }">
             <v-icon class="mr-2" @click="atualizar(item.id)">mdi-table-edit</v-icon>
             <v-icon class="mr-2" @click="showModal(item)">mdi-delete</v-icon>
@@ -154,10 +155,25 @@ export default {
       erro: "",
       show: false,
       lancamento: {},
-      typeAlert: null
+      typeAlert: null,
+      saldoAtual: 0
     };
   },
   methods: {
+    calcularSaldo(item) {
+      // eslint-disable-next-line no-console
+       console.log(item)
+      // let saldoAtual = 0
+      if (item.tipo == "Debito") {
+        this.saldoAtual -= parseFloat(item.valor);
+      } else {
+        this.saldoAtual += parseFloat(item.valor);
+      }
+
+      //eslint-disable-next-line no-console
+      console.log(this.saldoAtual);
+      // return this.saldoAtual;
+    },
     getColor(tipo) {
       if (tipo == "Debito") return "red";
       else return "green";
@@ -171,7 +187,7 @@ export default {
       this.$router.push({ path: `/lancamentos/editar/${id}` });
     },
     deletar(item) {
-      const url = `${urlApi}/api/lancamentos/${item.id}`;
+      const url = `${urlApi}lancamentos/${item.id}`;
       this.$http.delete(url).then(() => {
         this.getDados();
         this.$store.dispatch("setAlert", {
@@ -183,12 +199,11 @@ export default {
     },
     getDados() {
       const filtros = queryString.stringify(this.filtro);
-      const url = `${urlApi}/api/lancamentos?${filtros}`;
+      const url = `${urlApi}lancamentos?${filtros}`;
       this.$http
         .get(url)
         .then(res => {
-          // eslint-disable-next-line no-console
-          console.log(res.data);
+          this.lancamentos = res.data;
           let saldoAtt = 0;
           let arrayData = [];
           res.data.forEach(r => {
@@ -197,9 +212,8 @@ export default {
 
           arrayData.reverse();
 
-          this.lancamentos = res.data;
           let new_index = arrayData.length - 1;
-          
+
           arrayData.map((current_val, index) => {
             if (current_val.tipo == "Credito") {
               saldoAtt = parseFloat(saldoAtt) + parseFloat(current_val.valor);
@@ -214,15 +228,14 @@ export default {
             }
             return current_val;
           });
+          this.lancamentos.reverse()
         })
         .catch(erro => (this.erro = erro));
     },
     getContasDados() {
       this.$http
-        .get(`${urlApi}/api/contas`)
+        .get(`${urlApi}contas`)
         .then(res => {
-          // eslint-disable-next-line no-console
-          console.log(res.data);
           this.contas = res.data.map(item => {
             return { text: item.descricao, value: item.id };
           });
@@ -233,10 +246,8 @@ export default {
     },
     getFluxosDados() {
       this.$http
-        .get(`${urlApi}/api/fluxos`)
+        .get(`${urlApi}fluxos`)
         .then(res => {
-          // eslint-disable-next-line no-console
-          console.log(res.data);
           this.fluxos = res.data.map(item => {
             return { text: item.descricao, value: item.id };
           });
@@ -259,7 +270,7 @@ export default {
           return total + parseFloat(elem.valor);
         }
       }, 0);
-    }
+    },
   },
 
   created() {

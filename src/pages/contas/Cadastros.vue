@@ -39,7 +39,7 @@ export default {
     atualizar() {
       const id = this.conta.id ? this.conta.id : "";
       const method = this.conta.id ? "put" : "post";
-      const url = `${urlApi}api/contas/${id}`;
+      const url = `${urlApi}contas/${id}`;
       this.$http[method](url, this.conta).then(res => {
         // eslint-disable-next-line no-console
         console.log(res);
@@ -53,7 +53,7 @@ export default {
     },
     getDados(id) {
       this.$http
-        .get(`${urlApi}/api/contas/${id}`)
+        .get(`${urlApi}contas/${id}`)
         .then(res => {
           // eslint-disable-next-line no-console
           console.log(res.data);
@@ -65,7 +65,7 @@ export default {
     },
     getBancosDados() {
       this.$http
-        .get(`${urlApi}/api/bancos`)
+        .get(`${urlApi}bancos`)
         .then(res => {
           // eslint-disable-next-line no-console
           // console.log(res.data);

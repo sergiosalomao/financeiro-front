@@ -71,7 +71,7 @@ export default {
       this.$router.push({ path: `/fluxos/editar/${id}` });
     },
     deletar(item) {
-      const url = `${urlApi}/api/fluxos/${item.id}`;
+      const url = `${urlApi}fluxos/${item.id}`;
       this.$http.delete(url).then(() => {
         this.getFluxos();
         this.$store.dispatch("setAlert", {
@@ -83,7 +83,7 @@ export default {
     },
     getFluxos() {
       this.$http
-        .get(`${urlApi}/api/fluxos`)
+        .get(`${urlApi}fluxos`)
         .then(res => (this.fluxos = res.data))
         .catch(erro => (this.erro = erro));
     }

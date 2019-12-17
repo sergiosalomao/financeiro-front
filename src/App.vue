@@ -10,7 +10,7 @@
             <v-list-item-title>Dashboard</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-         <v-list-item to="/lancamentos">
+        <v-list-item to="/lancamentos">
           <v-list-item-action>
             <v-icon>mdi-checkbox-marked-circle-outline</v-icon>
           </v-list-item-action>
@@ -18,20 +18,32 @@
             <v-list-item-title>Lançamentos</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-          <v-list-item to="/bancos">
+        <v-list-item to="/titulos">
           <v-list-item-action>
             <v-icon>mdi-bank</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title >Bancos</v-list-item-title>
+            <v-list-item-title>Titulos</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+      
+        <v-list-item to="/bancos">
+          <v-list-item-action>
+            <v-icon>mdi-bank</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title>Bancos</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+      
+
         <v-list-item to="/contas">
           <v-list-item-action>
             <v-icon>mdi-bank</v-icon>
           </v-list-item-action>
           <v-list-item-content>
-            <v-list-item-title >Contas</v-list-item-title>
+            <v-list-item-title>Contas</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
 
@@ -52,7 +64,7 @@
     </v-app-bar>
 
     <v-content>
-     <router-view></router-view>
+      <router-view></router-view>
     </v-content>
     <v-footer color="indigo" app>
       <span class="white--text">&copy; 2019</span>

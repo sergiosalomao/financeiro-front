@@ -69,7 +69,7 @@ export default {
     deletar(item) {
       // eslint-disable-next-line no-console
            console.log(item.id);
-      const url = `${urlApi}/api/bancos/${item.id}`;
+      const url = `${urlApi}bancos/${item.id}`;
       this.$http.delete(url).then(() => {
       this.getDados();        
         this.$store.dispatch("setAlert", {
@@ -82,7 +82,7 @@ export default {
     },
     getDados() {
       this.$http
-        .get(`${urlApi}/api/bancos`)
+        .get(`${urlApi}bancos`)
         .then(res => (this.bancos = res.data))
         .catch(erro => (this.erro = erro));
     }

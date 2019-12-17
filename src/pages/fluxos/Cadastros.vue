@@ -17,6 +17,7 @@
   </v-container>
 </template>
 <script>
+import urlApi from "@/config/urlApi";
 export default {
   data() {
     return {
@@ -32,7 +33,7 @@ export default {
     atualizar() {
       const id = this.fluxo.id ? this.fluxo.id : "";
       const method = this.fluxo.id ? "put" : "post";
-      const url = `http://localhost:8000/api/fluxos/${id}`;
+      const url = `${urlApi}fluxos/${id}`;
       this.$http[method](url, this.fluxo).then(() => {
         this.$store.dispatch('setAlert',{show: true, mensagem:'Operação realizada com sucesso',type:'success'})
         this.$router.push({ path: `/fluxos/` });
@@ -40,7 +41,7 @@ export default {
     },
     getDados(id) {
       this.$http
-        .get(`http://localhost:8000/api/fluxos/${id}`)
+        .get(`${urlApi}fluxos/${id}`)
         .then(res => {
           this.fluxo = res.data;
         })

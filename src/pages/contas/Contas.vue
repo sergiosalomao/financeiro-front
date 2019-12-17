@@ -72,7 +72,7 @@ export default {
       this.$router.push({ path: `/contas/editar/${id}` });
     },
     deletar(item) {
-      const url = `${urlApi}api/contas/${item.id}`;
+      const url = `${urlApi}contas/${item.id}`;
       this.$http.delete(url).then(() => {
         this.getDados();
         this.$store.dispatch("setAlert", {
@@ -84,7 +84,7 @@ export default {
     },
     getDados() {
       this.$http
-        .get(`${urlApi}api/contas`)
+        .get(`${urlApi}contas`)
         .then(res => (this.contas = res.data))
         .catch(erro => (this.erro = erro));
     }
