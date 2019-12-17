@@ -24,7 +24,7 @@
             </v-col>
           </v-row>
           <v-row>
-            <v-col col="12" md="6">
+            <v-col col="12" md="4">
               <v-autocomplete
                 v-model="filtro.conta_id"
                 :items="contas"
@@ -36,7 +36,7 @@
                 multiple
               ></v-autocomplete>
             </v-col>
-            <v-col col="12" md="6">
+            <v-col col="12" md="4">
               <v-autocomplete
                 v-model="filtro.fluxo_id"
                 :items="fluxos"
@@ -46,6 +46,18 @@
                 small-chips
                 label="Fluxos"
                 multiple
+              ></v-autocomplete>
+            </v-col>
+            <v-col col="12" md="4">
+              <v-autocomplete
+                v-model="filtro.status"
+                :items="status"
+                outlined
+                dense
+                chips
+                small-chips
+                label="Status"
+                
               ></v-autocomplete>
             </v-col>
           </v-row>
@@ -70,18 +82,34 @@
           <template v-slot:top>
             <v-toolbar flat>
               <div class="flex-grow-2"></div>
-              <v-toolbar-title class="subtitle">Saldo {{totalComputed}}</v-toolbar-title>
+              <v-toolbar-title class="subtitle">Saldo {{totalComputed | dinheiro}}</v-toolbar-title>
               <v-spacer></v-spacer>
             </v-toolbar>
           </template>
           <template v-slot:item.tipo="{ item }">
             <v-chip :color="getColor(item.tipo)" dark>{{ item.tipo }}</v-chip>
           </template>
+          
+           <template v-slot:item.valor="{ item }">
+            {{item.valor | dinheiro}}
+          </template>
+
+          <template v-slot:item.saldo="{ item }">
+            {{item.saldo | dinheiro}}
+          </template>
+
+           <template v-slot:item.status="{ item }">
+            <v-chip :color="getColorStatus(item.status)" dark>{{ item.status }}</v-chip>
+          </template>
 
           <template v-slot:item.action="{ item }">
-            <v-icon class="mr-2" @click="atualizar(item.id)">mdi-table-edit</v-icon>
-            <v-icon class="mr-2" @click="showModal(item)">mdi-delete</v-icon>
+            <v-icon v-if="item.status == 'Aberto'" class="mr-2" @click="atualizar(item.id)">mdi-table-edit</v-icon>
+            <v-icon v-if="item.status == 'Aberto'" class="mr-2" @click="showModal(item)">mdi-delete</v-icon>
+            <v-icon v-if="item.status == 'Aberto'" class="mr-2" @click="showModalBaixaTitulo(item)">mdi-checkbox-marked-circle</v-icon>
+            <v-icon v-if="item.status == 'Pago'"   class="mr-2" @click="showModalCancelaBaixa(item)">mdi-update</v-icon>
           </template>
+
+
         </v-data-table>
       </v-card>
     </v-col>
@@ -92,17 +120,34 @@
       @deletar="deletar($event)"
       :item="titulo"
     />
+
+    <modal-baixa-titulo
+      :dialog="showModalBaixaTit"
+      @fechar="fecharModalBaixaTitulo"
+      @deletar="deletar($event)"
+      :item="tituloBaixaTitulo"
+    />
+
+      <modal-cancela-baixa
+      :dialog="showModalCancelaBaixaTit"
+      @fechar="fecharModalCancelaBaixa"
+      @deletar="deletar($event)"
+      :item="tituloCancelaBaixa"
+    />
+
   </v-container>
 </template>
 <script>
 import ModalDelete from "@/components/modal/ModalDelete";
+import ModalBaixaTitulo from "@/components/modal/ModalBaixaTitulo";
+import ModalCancelaBaixa from "@/components/modal/ModalCancelaBaixa";
 import urlApi from "@/config/urlApi";
 import AlertComponent from "@/components/alert/AlertComponent";
 import queryString from "query-string";
 
 export default {
   name: "Titulo",
-  components: { ModalDelete, AlertComponent },
+  components: { ModalDelete, AlertComponent, ModalBaixaTitulo,ModalCancelaBaixa },
   data() {
     return {
       filtro: {},
@@ -144,6 +189,10 @@ export default {
           value: "saldo"
         },
         {
+          text: "Status",
+          value: "status"
+        },
+        {
           text: "Ações",
           value: "action"
         }
@@ -151,24 +200,49 @@ export default {
       contas: [],
       fluxos: [],
       titulos: [],
+      status : ['Em Aberto','Pago'],
       valid: false,
       erro: "",
       show: false,
       titulo: {},
+      tituloBaixaTitulo: {},
+      showModalBaixaTit: false,
+      tituloCancelaBaixa: {},
+      showModalCancelaBaixaTit: false,
       typeAlert: null,
       saldoAtual: 0
     };
   },
   methods: {
-    
+    fecharModalBaixaTitulo(){
+      this.showModalBaixaTit = false
+      this.getDados()
+    },
+      fecharModalCancelaBaixa(){
+      this.showModalCancelaBaixaTit = false
+      this.getDados()
+    },
     getColor(tipo) {
       if (tipo == "Debito") return "red";
       else return "green";
     },
 
+     getColorStatus(status) {
+      if (status == "Aberto") return "green";
+      else return "silver";
+    },
+
     showModal(item) {
       this.titulo = item;
       this.show = true;
+    },
+     showModalBaixaTitulo(item) {
+      this.tituloBaixaTitulo = item;
+      this.showModalBaixaTit = true;
+    },
+    showModalCancelaBaixa(item) {
+      this.tituloCancelaBaixa = item;
+      this.showModalCancelaBaixaTit = true;
     },
     atualizar(id) {
       this.$router.push({ path: `/titulos/editar/${id}` });

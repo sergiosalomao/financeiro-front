@@ -13,6 +13,8 @@ Vue.config.productionTip = false
 import VueTheMask from 'vue-the-mask'
 Vue.use(VueTheMask)
 
+import './filter/dinheiro'
+
 
 new Vue({
   store,

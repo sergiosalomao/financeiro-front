@@ -45,8 +45,11 @@
                 </v-col>
               </v-row>
               <v-row>
-                <v-col col="12" md="12">
+                <v-col col="12" md="10">
                   <v-select v-model="titulo.cedente_id" label="Cedente" :items="cedentes"></v-select>
+                </v-col>
+                <v-col col="12" md="2">
+                   <v-btn color="success" class="mr-4" to="/cedentes/cadastro">Adicionar Cedente</v-btn>
                 </v-col>
               </v-row>
               <v-row>
@@ -68,10 +71,10 @@
   </v-container>
 </template>
 <script>
-import { VMoney } from "v-money";
+
 import urlApi from "@/config/urlApi";
 export default {
-  directives: { money: VMoney },
+  
   data() {
     return {
       moneyConfig: {
@@ -87,7 +90,7 @@ export default {
       titulo: {},
       contas: [],
       fluxos: [],
-      cedentes: [],
+      cedentes:[],
       valid: false
     };
   },
@@ -164,6 +167,9 @@ export default {
 
   },
   mounted() {
+// eslint-disable-next-line no-console
+           console.log("aqui" + this.$route.params.id);
+    
     if (this.$route.params.id) {
       this.getDados(this.$route.params.id);
     }

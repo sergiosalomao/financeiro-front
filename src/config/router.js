@@ -12,6 +12,8 @@ import Lancamentos from '@/pages/lancamentos/Lancamentos'
 import CadastrosLancamentos from '@/pages/lancamentos/Cadastros'
 import Titulos from '@/pages/titulos/Titulos'
 import CadastrosTitulos from '@/pages/titulos/Cadastros'
+import Cedentes from '@/pages/cedentes/Cedentes'
+import CadastrosCedentes from '@/pages/cedentes/Cadastros'
 
 
 Vue.use(VueRouter);
@@ -95,6 +97,21 @@ const routes = [
         name: 'Editar Titulos',
         path: '/titulos/editar/:id',
         component: CadastrosTitulos
+    },
+
+    {
+        path: '/cedentes',
+        component: Cedentes
+    },
+    {
+        name: 'Cadastrar cedentes',
+        path: '/cedentes/cadastro',
+        component: CadastrosCedentes
+    },
+    {
+        name: 'Editar Cedentes',
+        path: '/cedentes/editar/:id',
+        component: CadastrosCedentes
     },
    
 ]

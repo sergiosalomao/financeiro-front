@@ -70,12 +70,20 @@
           <template v-slot:top>
             <v-toolbar flat>
               <div class="flex-grow-2"></div>
-              <v-toolbar-title class="subtitle">Saldo {{totalComputed}}</v-toolbar-title>
+              <v-toolbar-title class="subtitle">Saldo {{totalComputed | dinheiro}}</v-toolbar-title>
               <v-spacer></v-spacer>
             </v-toolbar>
           </template>
           <template v-slot:item.tipo="{ item }">
             <v-chip :color="getColor(item.tipo)" dark>{{ item.tipo }}</v-chip>
+          </template>
+
+           <template v-slot:item.valor="{ item }">
+            {{item.valor | dinheiro}}
+          </template>
+
+          <template v-slot:item.saldo="{ item }">
+            {{item.saldo | dinheiro}}
           </template>
 
           <template v-slot:item.action="{ item }">
@@ -160,20 +168,7 @@ export default {
     };
   },
   methods: {
-    calcularSaldo(item) {
-      // eslint-disable-next-line no-console
-       console.log(item)
-      // let saldoAtual = 0
-      if (item.tipo == "Debito") {
-        this.saldoAtual -= parseFloat(item.valor);
-      } else {
-        this.saldoAtual += parseFloat(item.valor);
-      }
-
-      //eslint-disable-next-line no-console
-      console.log(this.saldoAtual);
-      // return this.saldoAtual;
-    },
+   
     getColor(tipo) {
       if (tipo == "Debito") return "red";
       else return "green";
