@@ -11,7 +11,7 @@
                   <v-text-field
                     v-model="titulo.vencimento"
                     label="Vencimento"
-                    v-mask="'##/##/####'"
+                  type="date"
                   ></v-text-field>
                 </v-col>
               </v-row>
@@ -121,16 +121,16 @@ export default {
       });
     },
     getDados(id) {
-      this.$http.get(`${urlApi}titulos/${id}`).then(res => {
-        (this.titulo = {
+      this.$http.get(`${urlApi}titulos/${id}`)
+      .then(res => {
+        this.titulo = {
           ...res.data,
+          
           fluxo_id: res.data.fluxo.id,
           conta_id: res.data.conta.id,
           cedente_id: res.data.cedente.id,
           valor: parseFloat(res.data.valor)
-        }),
-          // eslint-disable-next-line no-console
-          console.log(this.titulo);
+        },
         this.getFluxoByTipo(res.data.tipo);
       });
     },

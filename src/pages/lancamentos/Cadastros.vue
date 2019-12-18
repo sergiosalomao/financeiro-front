@@ -45,11 +45,11 @@
                 </v-col>
               </v-row>
 
-              <v-row>
+              <!-- <v-row>
                 <v-col col="12" md="12">
                   <v-text-field v-model="lancamento.titulo_id" label="Titulo"></v-text-field>
                 </v-col>
-              </v-row>
+              </v-row> -->
               <v-row>
                 <v-col col="12" md="12">
                   <v-text-field v-model="lancamento.descricao" label="Descricao"></v-text-field>

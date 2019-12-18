@@ -1,6 +1,5 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-
 import Dashboard from '@/pages/dashboard/Dashboard'
 import Contas from '@/pages/contas/Contas'
 import CadastrosContas from '@/pages/contas/Cadastros'
@@ -14,7 +13,6 @@ import Titulos from '@/pages/titulos/Titulos'
 import CadastrosTitulos from '@/pages/titulos/Cadastros'
 import Cedentes from '@/pages/cedentes/Cedentes'
 import CadastrosCedentes from '@/pages/cedentes/Cadastros'
-
 
 Vue.use(VueRouter);
 
@@ -113,7 +111,7 @@ const routes = [
         path: '/cedentes/editar/:id',
         component: CadastrosCedentes
     },
-   
+ 
 ]
 
 const router = new VueRouter({

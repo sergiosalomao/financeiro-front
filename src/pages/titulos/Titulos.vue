@@ -12,9 +12,16 @@
       <v-btn color="success" class="mr-4" to="/titulos/cadastro">Novo Titulo</v-btn>
     </v-col>
     <v-col>
-      <v-card>
-        <v-card-title>Filtros</v-card-title>
-        <v-card-text>
+
+<template>
+  <v-expansion-panels>
+    <v-expansion-panel
+      v-for="(item,i) in 1"
+      :key="i"
+    >
+      <v-expansion-panel-header class="title">Filtros</v-expansion-panel-header>
+      <v-expansion-panel-content>
+              
           <v-row>
             <v-col col="12" md="2">
               <v-text-field v-model="filtro.datainicio" label="Data Inicio" v-mask="'##/##/####'"></v-text-field>
@@ -61,13 +68,21 @@
               ></v-autocomplete>
             </v-col>
           </v-row>
-        </v-card-text>
+        
         <v-divider></v-divider>
-        <v-card-actions>
+        
           <div class="flex-grow-1"></div>
           <v-btn color="primary" @click="getDados()">Filtrar</v-btn>
-        </v-card-actions>
-      </v-card>
+        
+      
+
+
+      </v-expansion-panel-content>
+    </v-expansion-panel>
+  </v-expansion-panels>
+</template>
+
+      
     </v-col>
 
     <v-col>
@@ -90,6 +105,9 @@
             <v-chip :color="getColor(item.tipo)" dark>{{ item.tipo }}</v-chip>
           </template>
           
+            <template v-slot:item.vencimento="{ item }">
+            {{item.vencimento | data}}
+          </template>
            <template v-slot:item.valor="{ item }">
             {{item.valor | dinheiro}}
           </template>
@@ -160,6 +178,10 @@ export default {
           text: "Vencimento",
           value: "vencimento"
         },
+         {
+          text: "Dias Atraso",
+          value: "diasatraso"
+        },
         {
           text: "Tipo",
           value: "tipo"
@@ -200,7 +222,7 @@ export default {
       contas: [],
       fluxos: [],
       titulos: [],
-      status : ['Em Aberto','Pago'],
+      status : ['Aberto','Pago'],
       valid: false,
       erro: "",
       show: false,
@@ -210,7 +232,8 @@ export default {
       tituloCancelaBaixa: {},
       showModalCancelaBaixaTit: false,
       typeAlert: null,
-      saldoAtual: 0
+      saldoAtual: 0,
+      
     };
   },
   methods: {

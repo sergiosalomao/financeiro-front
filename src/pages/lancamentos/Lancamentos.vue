@@ -12,9 +12,17 @@
       <v-btn color="success" class="mr-4" to="/lancamentos/cadastro">Novo Lancamento</v-btn>
     </v-col>
     <v-col>
-      <v-card>
-        <v-card-title>Filtros</v-card-title>
-        <v-card-text>
+      
+      <template>
+  <v-expansion-panels>
+    <v-expansion-panel
+      v-for="(item,i) in 1"
+      :key="i"
+    >
+      <v-expansion-panel-header class="title">Filtros</v-expansion-panel-header>
+      <v-expansion-panel-content>
+       
+
           <v-row>
             <v-col col="12" md="2">
               <v-text-field v-model="filtro.datainicio" label="Data Inicio" v-mask="'##/##/####'"></v-text-field>
@@ -49,13 +57,25 @@
               ></v-autocomplete>
             </v-col>
           </v-row>
-        </v-card-text>
+       
         <v-divider></v-divider>
-        <v-card-actions>
+     
           <div class="flex-grow-1"></div>
           <v-btn color="primary" @click="getDados()">Filtrar</v-btn>
-        </v-card-actions>
-      </v-card>
+  
+
+
+
+
+
+      </v-expansion-panel-content>
+    </v-expansion-panel>
+  </v-expansion-panels>
+</template>
+      
+
+
+
     </v-col>
 
     <v-col>
@@ -77,7 +97,9 @@
           <template v-slot:item.tipo="{ item }">
             <v-chip :color="getColor(item.tipo)" dark>{{ item.tipo }}</v-chip>
           </template>
-
+          <template v-slot:item.valor="{ item }">
+            {{item.valor | dinheiro}}
+          </template>
            <template v-slot:item.valor="{ item }">
             {{item.valor | dinheiro}}
           </template>
@@ -85,10 +107,14 @@
           <template v-slot:item.saldo="{ item }">
             {{item.saldo | dinheiro}}
           </template>
+             
+             <template v-slot:item.titulo_id="{ item }">
+            <v-chip v-if="item.titulo_id > 0 " :color="silver" >{{ item.titulo_id }}</v-chip>
+          </template>
 
           <template v-slot:item.action="{ item }">
-            <v-icon class="mr-2" @click="atualizar(item.id)">mdi-table-edit</v-icon>
-            <v-icon class="mr-2" @click="showModal(item)">mdi-delete</v-icon>
+            <v-icon v-if="item.titulo_id == null " class="mr-2" @click="atualizar(item.id)">mdi-table-edit</v-icon>
+            <v-icon v-if="item.titulo_id ==null " class="mr-2" @click="showModal(item)">mdi-delete</v-icon>
           </template>
         </v-data-table>
       </v-card>

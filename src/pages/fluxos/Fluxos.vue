@@ -1,14 +1,17 @@
 <template>
   <v-container fluid>
+    <v-col>
     <h2>Fluxos</h2>
+    </v-col>
     <alert-component
       v-if="alertComputed.show"
       :mensagem="alertComputed.mensagem"
       :type="alertComputed.type"
     />
-    <v-container fluid>
+    <v-col>
       <v-btn color="success" class="mr-4" to="/fluxos/cadastro">Adicionar</v-btn>
-    </v-container>
+    </v-col>
+    <v-col>
     <v-data-table :headers="headers" :items="fluxos" hide-default-footer class="elevation-1">
       <template v-slot:item.tipo="{ item }">
         <v-chip :color="getColor(item.tipo)" dark>{{ item.tipo }}</v-chip>
@@ -18,6 +21,7 @@
         <v-icon class="mr-2" @click="showModal(item)">mdi-delete</v-icon>
       </template>
     </v-data-table>
+    </v-col>
     <modal-delete :dialog="show" @fechar="show = false" @deletar="deletar($event)" :item="fluxo" />
   </v-container>
 </template>

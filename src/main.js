@@ -14,6 +14,7 @@ import VueTheMask from 'vue-the-mask'
 Vue.use(VueTheMask)
 
 import './filter/dinheiro'
+import './filter/data'
 
 
 new Vue({

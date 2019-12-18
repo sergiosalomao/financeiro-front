@@ -17,12 +17,12 @@
   </v-container>
 </template>
 <script>
-import urlApi from '@/config/urlApi'
+import urlApi from "@/config/urlApi";
 export default {
   data() {
     return {
       banco: {},
-      valid: false,
+      valid: false
     };
   },
   methods: {
@@ -31,16 +31,18 @@ export default {
       const method = this.banco.id ? "put" : "post";
       const url = `${urlApi}bancos/${id}`;
       this.$http[method](url, this.banco).then(() => {
-        this.$store.dispatch('setAlert',{show: true, mensagem:'Operação realizada com sucesso',type:'success'})
+        this.$store.dispatch("setAlert", {
+          show: true,
+          mensagem: "Operação realizada com sucesso",
+          type: "success"
+        });
         this.$router.push({ path: `/bancos/` });
       });
     },
     getDados(id) {
-      this.$http
-        .get(`${urlApi}bancos/${id}`)
-        .then(res => {
-          this.banco = res.data;
-        })
+      this.$http.get(`${urlApi}bancos/${id}`).then(res => {
+        this.banco = res.data;
+      });
     }
   },
   mounted() {
