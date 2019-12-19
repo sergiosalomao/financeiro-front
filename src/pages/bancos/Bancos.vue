@@ -1,10 +1,8 @@
 <template>
   <v-container fluid>
-    
       <v-col >
         <h2>Bancos</h2>
       </v-col>
-    
     <alert-component
       v-if="alertComputed.show"
       :mensagem="alertComputed.mensagem"
@@ -14,12 +12,7 @@
       <v-btn color="success" class="mr-4" to="/bancos/cadastro">Adicionar</v-btn>
     </v-col>
      <v-col>
-    <v-data-table :headers="headers" :items="bancos" hide-default-footer class="elevation-1">
-      <template v-slot:item.action="{ item }">
-        <v-icon class="mr-2" @click="atualizar(item.id)">mdi-table-edit</v-icon>
-        <v-icon class="mr-2" @click="showModalDelete(item)">mdi-delete</v-icon>
-      </template>
-    </v-data-table>
+    <v-data-table-bancos></v-data-table-bancos>
      </v-col>
     <modal-delete :dialog="show" @fechar="show = false" @deletar="deletar($event)" :item="banco" />
   </v-container>
@@ -28,10 +21,11 @@
 import ModalDelete from "@/components/modal/ModalDelete";
 import urlApi from "@/config/urlApi";
 import AlertComponent from "@/components/alert/AlertComponent";
+import TabelaBanco from "@/bancos/TabelaBancoComponent";
 
 export default {
   name: "Banco",
-  components: { ModalDelete, AlertComponent },
+  components: { ModalDelete, AlertComponent,TabelaBanco },
   data() {
     return {
       headers: [
