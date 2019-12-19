@@ -1,6 +1,6 @@
 <template>
   <div class="modal-baixa-titulo">
-    <v-dialog :value="dialog" @input="fechar" max-width="600">
+    <v-dialog :value="dialog" @input="fecharModalBaixaTitulo" max-width="600">
       <v-card>
         <v-card-title class="headline">Baixar Titulo</v-card-title>
         <v-container>
