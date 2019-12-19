@@ -1,9 +1,9 @@
 <template>
   <v-app id="inspire">
-    <v-navigation-drawer v-model="drawer" app>
+    <v-navigation-drawer v-model="drawer" app v-if="isAuthenticated">
       <v-list>
-        <v-list-item to="/" >
-          <v-list-item-icon >
+        <v-list-item to="/">
+          <v-list-item-icon>
             <v-icon>mdi-view-dashboard</v-icon>
           </v-list-item-icon>
 
@@ -26,12 +26,35 @@
           </v-list-item>
         </v-list-group>
       </v-list>
-
     </v-navigation-drawer>
 
-    <v-app-bar app color="indigo" dark>
+    <v-app-bar app color="indigo" dark v-if="isAuthenticated">
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
       <v-toolbar-title>SCF 1.0 - Sistema de Controle Financeiro</v-toolbar-title>
+      <v-spacer></v-spacer>
+
+      <div class="text-center">
+        <v-menu>
+          <template v-slot:activator="{ on: menu }">
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on: tooltip }">
+                <v-btn icon v-on="{ ...tooltip, ...menu }">
+                  <v-icon>mdi-dots-vertical</v-icon>
+                </v-btn>
+              </template>
+              <span>Menu configuracao</span>
+            </v-tooltip>
+          </template>
+          <v-list>
+            <v-list-item >
+              <v-list-item-title >Configurações</v-list-item-title>
+            </v-list-item>
+            <v-list-item @click="logout">
+              <v-list-item-title >Sair</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+      </div>
     </v-app-bar>
 
     <v-content>
@@ -44,6 +67,8 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+
 export default {
   props: {
     source: String
@@ -56,13 +81,17 @@ export default {
       ["Contas", "mdi-square-inc-cash", "/contas"],
       ["Fluxos", "mdi-sitemap", "/fluxos"]
     ],
-    cruds: [
-      ["Create", "add"],
-      ["Read", "insert_drive_file"],
-      ["Update", "update"],
-      ["Delete", "delete"]
-    ],
     drawer: null
-  })
+  }),
+  methods: {
+    logout(){
+
+      this.$store.dispatch("logout")
+       this.$router.push({ path: `/login` });
+    }
+  },
+  computed: {
+    ...mapGetters(["isAuthenticated"])
+  }
 };
 </script>

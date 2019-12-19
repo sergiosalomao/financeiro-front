@@ -109,7 +109,7 @@
           </template>
              
              <template v-slot:item.titulo_id="{ item }">
-            <v-chip v-if="item.titulo_id > 0 " :color="silver" >{{ item.titulo_id }}</v-chip>
+            <v-chip v-if="item.titulo_id > 0 " color="silver" >{{ item.titulo_id }}</v-chip>
           </template>
 
           <template v-slot:item.action="{ item }">

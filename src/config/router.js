@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Dashboard from '@/pages/dashboard/Dashboard'
+import Login from '@/pages/login/Login'
 import Contas from '@/pages/contas/Contas'
 import CadastrosContas from '@/pages/contas/Cadastros'
 import Fluxos from '@/pages/fluxos/Fluxos'
@@ -14,48 +15,74 @@ import CadastrosTitulos from '@/pages/titulos/Cadastros'
 import Cedentes from '@/pages/cedentes/Cedentes'
 import CadastrosCedentes from '@/pages/cedentes/Cadastros'
 
+import store from '@/store/store'
+
 Vue.use(VueRouter);
 
+const ifAuthenticated = (to, from, next) => {
+    if (store.getters['isAuthenticated']) {
+        // if (to.matched.some(record => record.meta.admin)) {
+        //     localStorage.getItem('user-admin') == 0 ? next('/') : next()
+        // }
+        next()
+        return
+    }
+    next('/login')
+}
+
 const routes = [
+    
     {
         path: '/',
-        component: Dashboard
+        component: Dashboard,
+        beforeEnter: ifAuthenticated,
+    },
+    {
+        path: '/login',
+        component: Login
     },
     {
         path: '/contas',
         component: Contas,
-        props: true
+        props: true,
+        beforeEnter: ifAuthenticated,
     },
     {
         name: 'Cadastrar Conta',
         path: '/contas/cadastro',
-        component: CadastrosContas
+        component: CadastrosContas,
+        beforeEnter: ifAuthenticated,
     },
     {
         name: 'Editar conta',
         path: '/contas/editar/:id',
-        component: CadastrosContas
+        component: CadastrosContas,
+        beforeEnter: ifAuthenticated,
     },
     {
         path: '/fluxos',
         component: Fluxos,
-        props: true
+        props: true,
+        beforeEnter: ifAuthenticated,
     },
     {
         name: 'Cadastrar Fluxo',
         path: '/fluxos/cadastro',
-        component: CadastrosFluxos
+        component: CadastrosFluxos,
+        beforeEnter: ifAuthenticated,
     },
     {
         name: 'Editar fluxo',
         path: '/fluxos/editar/:id',
-        component: CadastrosFluxos
+        component: CadastrosFluxos,
+        beforeEnter: ifAuthenticated,
     },
     {
         name: 'Bancos',
         path: '/bancos',
         props: true,
-        component: Bancos
+        component: Bancos,
+        beforeEnter: ifAuthenticated,
     },
     {
         name: 'Cadastrar Bancos',
@@ -65,51 +92,61 @@ const routes = [
     {
         name: 'Editar Banco',
         path: '/bancos/editar/:id',
-        component: CadastrosBancos
+        component: CadastrosBancos,
+        beforeEnter: ifAuthenticated,
     },
     {
         path: '/lancamentos',
-        component: Lancamentos
+        component: Lancamentos,
+        beforeEnter: ifAuthenticated,
     },
     {
         name: 'Cadastrar Lancamento',
         path: '/lancamentos/cadastro',
-        component: CadastrosLancamentos
+        component: CadastrosLancamentos,
+        beforeEnter: ifAuthenticated,
     },
     {
         name: 'Editar Lancamentos',
         path: '/lancamentos/editar/:id',
-        component: CadastrosLancamentos
+        component: CadastrosLancamentos,
+        beforeEnter: ifAuthenticated,
     },
 
     {
         path: '/titulos',
-        component: Titulos
+        component: Titulos,
+        beforeEnter: ifAuthenticated,
     },
     {
         name: 'Cadastrar titulo',
         path: '/titulos/cadastro',
-        component: CadastrosTitulos
+        component: CadastrosTitulos,
+        beforeEnter: ifAuthenticated,
     },
     {
         name: 'Editar Titulos',
         path: '/titulos/editar/:id',
-        component: CadastrosTitulos
+        component: CadastrosTitulos,
+        beforeEnter: ifAuthenticated,
     },
 
     {
         path: '/cedentes',
-        component: Cedentes
+        component: Cedentes,
+        beforeEnter: ifAuthenticated,
     },
     {
         name: 'Cadastrar cedentes',
         path: '/cedentes/cadastro',
-        component: CadastrosCedentes
+        component: CadastrosCedentes,
+        beforeEnter: ifAuthenticated,
     },
     {
         name: 'Editar Cedentes',
         path: '/cedentes/editar/:id',
-        component: CadastrosCedentes
+        component: CadastrosCedentes,
+        beforeEnter: ifAuthenticated,
     },
  
 ]
