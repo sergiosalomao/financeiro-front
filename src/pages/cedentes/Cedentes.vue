@@ -1,33 +1,29 @@
 <template>
   <v-container fluid>
-    <h2>Cedentes</h2>
-    <alert-component
-      v-if="alertComputed.show"
-      :mensagem="alertComputed.mensagem"
-      :type="alertComputed.type"
-    />
+    <title-component titulo="Cedentes" />
     <v-container fluid>
       <v-btn color="success" class="mr-4" to="/cedentes/cadastro">Adicionar</v-btn>
     </v-container>
-    <v-data-table :headers="headers" :items="cedentes" hide-default-footer class="elevation-1">
-      <template v-slot:item.action="{ item }">
+    <table-component :headers="headers" :items="cedentes">
+        <template v-slot:acoes="{ item }">
         <v-icon class="mr-2" @click="atualizar(item.id)">mdi-table-edit</v-icon>
-        <v-icon class="mr-2" @click="showModal(item)">mdi-delete</v-icon>
+        <v-icon class="mr-2" @click="showModalDelete(item)">mdi-delete</v-icon>
       </template>
-    </v-data-table>
+    </table-component>
     <modal-delete :dialog="show" @fechar="show = false" @deletar="deletar($event)" :item="cedente" />
   </v-container>
 </template>
 <script>
 import ModalDelete from "@/components/modal/ModalDelete";
-import urlApi from "@/config/urlApi";
-import AlertComponent from "@/components/alert/AlertComponent";
-
+import TitleComponent from '@/components/title/TitleComponent'
+import TableComponent from '@/components/table/TableComponent'
+import CedenteService from "@/service/cedente/CedenteService";
 export default {
   name: "Cedente",
-  components: { ModalDelete, AlertComponent },
+  components: { ModalDelete, TitleComponent,TableComponent },
   data() {
     return {
+      CedenteService : new CedenteService(),
       headers: [
         {
           text: "Id",
@@ -44,43 +40,27 @@ export default {
         }
       ],
       cedentes: [],
-      valid: false,
-      erro: "",
       show: false,
       cedente: {},
-      typeAlert: null
     };
   },
   methods: {
-    showModal(item) {
+    showModalDelete(item) {
       this.cedente = item;
       this.show = true;
     },
     atualizar(id) {
       this.$router.push({ path: `/cedentes/editar/${id}` });
     },
-    deletar(item) {
-      const url = `${urlApi}cedentes/${item.id}`;
-      this.$http.delete(url).then(() => {
-        this.getDados();
-        this.$store.dispatch("setAlert", {
-          show: true,
-          mensagem: "Excluido com sucesso",
-          type: "error"
-        });
-      });
+    async deletar(item) {
+      await this.CedenteService.remove(item.id);
+      this.$toasted.global.defaultSuccess();
+      this.getDados();
     },
-    getDados() {
-      this.$http
-        .get(`${urlApi}cedentes`)
-        .then(res => (this.cedentes = res.data))
-        .catch(erro => (this.erro = erro));
-    }
-  },
-  computed: {
-    alertComputed() {
-      return this.$store.state.alert;
-    }
+    async getDados() {
+      const data = await this.CedenteService.list()
+      this.cedentes = data
+    },
   },
   created() {
     this.getDados();

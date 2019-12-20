@@ -8,11 +8,7 @@
             <v-form ref="form" v-model="valid" lazy-validation>
               <v-row>
                 <v-col col="12" md="12">
-                  <v-text-field
-                    v-model="titulo.vencimento"
-                    label="Vencimento"
-                  type="date"
-                  ></v-text-field>
+                  <v-text-field v-model="titulo.vencimento" label="Vencimento" type="date"></v-text-field>
                 </v-col>
               </v-row>
 
@@ -49,7 +45,7 @@
                   <v-select v-model="titulo.cedente_id" label="Cedente" :items="cedentes"></v-select>
                 </v-col>
                 <v-col col="12" md="2">
-                   <v-btn color="success" class="mr-4" to="/cedentes/cadastro">Adicionar Cedente</v-btn>
+                  <v-btn color="success" class="mr-4" to="/cedentes/cadastro">Adicionar Cedente</v-btn>
                 </v-col>
               </v-row>
               <v-row>
@@ -71,12 +67,18 @@
   </v-container>
 </template>
 <script>
-
 import urlApi from "@/config/urlApi";
+//import ContaService from "@/service/Conta/ContaService";
+import TituloService from "@/service/Titulo/TituloService";
+import FluxoService from "@/service/Fluxo/FluxoService";
+
 export default {
-  
   data() {
     return {
+      FluxoService: new FluxoService(),
+      //ContaService :new ContaService(),
+      TituloService: new TituloService(),
+
       moneyConfig: {
         decimal: ",",
         thousands: ".",
@@ -90,49 +92,34 @@ export default {
       titulo: {},
       contas: [],
       fluxos: [],
-      cedentes:[],
+      cedentes: [],
       valid: false
     };
   },
   methods: {
-    getFluxoByTipo(tipo) {
-      this.$http
-        .get(`${urlApi}fluxos?tipo=${tipo}`)
-        .then(res => {
-          this.fluxos = res.data.map(item => {
-            return { text: item.descricao, value: item.id };
-          });
-        })
-        .catch(erro => {
-          this.erro = erro;
-        });
-    },
-    atualizar() {
-      const id = this.titulo.id ? this.titulo.id : "";
-      const method = this.titulo.id ? "put" : "post";
-      const url = `${urlApi}titulos/${id}`;
-      this.$http[method](url, this.titulo).then(() => {
-        this.$store.dispatch("setAlert", {
-          show: true,
-          mensagem: "Operação realizada com sucesso",
-          type: "success"
-        });
-        this.$router.push({ path: `/titulos/` });
+    async getFluxoByTipo(tipo) {
+      const data = await this.FluxoService.search({ tipo: tipo });
+      this.fluxos = data.map(item => {
+        return { text: item.descricao, value: item.id };
       });
     },
-    getDados(id) {
-      this.$http.get(`${urlApi}titulos/${id}`)
-      .then(res => {
-        this.titulo = {
-          ...res.data,
-          
-          fluxo_id: res.data.fluxo.id,
-          conta_id: res.data.conta.id,
-          cedente_id: res.data.cedente.id,
-          valor: parseFloat(res.data.valor)
-        },
-        this.getFluxoByTipo(res.data.tipo);
-      });
+    async atualizar() {
+      await this.TituloService.createOrUpdate(this.titulo);
+      this.$toasted.global.defaultSuccess();
+      this.$router.push({ path: `/titulos/` });
+    },
+    async getDados(id) {
+      console.log(id)
+      const data = await this.TituloService.show(id);
+      console.log(data)
+      this.titulo = {
+        ...data,
+        fluxo_id: data.fluxo.id,
+        conta_id: data.conta.id,
+        cedente_id: data.cedente.id,
+        valor: parseFloat(data.valor)
+      },
+        this.getFluxoByTipo(data.tipo);
     },
 
     getContasDados() {
@@ -150,7 +137,7 @@ export default {
         });
     },
 
-      getCedentesDados() {
+    getCedentesDados() {
       this.$http
         .get(`${urlApi}cedentes`)
         .then(res => {
@@ -164,12 +151,8 @@ export default {
           this.erro = erro;
         });
     }
-
   },
   mounted() {
-// eslint-disable-next-line no-console
-           console.log("aqui" + this.$route.params.id);
-    
     if (this.$route.params.id) {
       this.getDados(this.$route.params.id);
     }
