@@ -4,6 +4,7 @@ import vuetify from './plugins/vuetify';
 
 import router from './config/router'
 import store from './store/store'
+import './plugins/toasted'
 
 import axios from 'axios'
 Vue.prototype.$http = axios

@@ -16,30 +16,24 @@
   </v-container>
 </template>
 <script>
-import urlApi from "@/config/urlApi";
+import CedenteService from "@/service/cedente/CedenteService"
 export default {
   data() {
     return {
+      CedenteService : new CedenteService(),
       cedente: {},
       valid: false,
     };
   },
   methods: {
-    atualizar() {
-      const id = this.cedente.id ? this.cedente.id : "";
-      const method = this.cedente.id ? "put" : "post";
-      const url = `${urlApi}cedentes/${id}`;
-      this.$http[method](url, this.cedente).then(() => {
-        this.$store.dispatch('setAlert',{show: true, mensagem:'Operação realizada com sucesso',type:'success'})
-        this.$router.push({ path: `/cedentes/` });
-      });
+    async atualizar() {
+     await this.CedenteService.createOrUpdate(this.cedente);
+      this.$toasted.global.defaultSuccess();
+      this.$router.push({ path: `/cedentes/` });
     },
-    getDados(id) {
-      this.$http
-        .get(`${urlApi}cedentes/${id}`)
-        .then(res => {
-          this.cedente = res.data;
-        })
+    async getDados(id) {
+      const data = await this.CedenteService.show(id)
+      this.cedente = data
     }
   },
   mounted() {

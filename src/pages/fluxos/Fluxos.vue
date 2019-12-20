@@ -1,40 +1,38 @@
 <template>
   <v-container fluid>
     <v-col>
-    <h2>Fluxos</h2>
+      <title-component titulo="Fluxos" />
     </v-col>
-    <alert-component
-      v-if="alertComputed.show"
-      :mensagem="alertComputed.mensagem"
-      :type="alertComputed.type"
-    />
     <v-col>
       <v-btn color="success" class="mr-4" to="/fluxos/cadastro">Adicionar</v-btn>
     </v-col>
     <v-col>
-    <v-data-table :headers="headers" :items="fluxos" hide-default-footer class="elevation-1">
-      <template v-slot:item.tipo="{ item }">
-        <v-chip :color="getColor(item.tipo)" dark>{{ item.tipo }}</v-chip>
-      </template>
-      <template v-slot:item.action="{ item }">
-        <v-icon class="mr-2" @click="atualizar(item.id)">mdi-table-edit</v-icon>
-        <v-icon class="mr-2" @click="showModal(item)">mdi-delete</v-icon>
-      </template>
-    </v-data-table>
+      <table-component :headers="headers" :items="fluxos">
+        <template v-slot:acoes="{ item }">
+          <v-icon class="mr-2" @click="atualizar(item.id)">mdi-table-edit</v-icon>
+          <v-icon class="mr-2" @click="showModalDelete(item)">mdi-delete</v-icon>
+        </template>
+      </table-component>
     </v-col>
     <modal-delete :dialog="show" @fechar="show = false" @deletar="deletar($event)" :item="fluxo" />
   </v-container>
 </template>
 <script>
 import ModalDelete from "@/components/modal/ModalDelete";
-import urlApi from "@/config/urlApi";
-import AlertComponent from "@/components/alert/AlertComponent";
+import TitleComponent from "@/components/title/TitleComponent";
+import TableComponent from "@/components/table/TableComponent";
+import FluxoService from "@/service/Fluxo/FluxoService";
 
 export default {
   name: "Fluxo",
-  components: { ModalDelete, AlertComponent },
+  components: {
+    ModalDelete,
+    TitleComponent,
+    TableComponent
+  },
   data() {
     return {
+      FluxoService: new FluxoService(),
       headers: [
         {
           text: "Id",
@@ -54,51 +52,30 @@ export default {
         }
       ],
       fluxos: [],
-      valid: false,
-      erro: "",
       show: false,
       fluxo: {},
-      typeAlert: null
     };
   },
   methods: {
-    getColor(tipo) {
-      if (tipo == "Debito") return "red";
-      else return "green";
-    },
-
-    showModal(item) {
+    showModalDelete(item) {
       this.fluxo = item;
       this.show = true;
     },
     atualizar(id) {
       this.$router.push({ path: `/fluxos/editar/${id}` });
     },
-    deletar(item) {
-      const url = `${urlApi}fluxos/${item.id}`;
-      this.$http.delete(url).then(() => {
-        this.getFluxos();
-        this.$store.dispatch("setAlert", {
-          show: true,
-          mensagem: "Excluido com sucesso",
-          type: "error"
-        });
-      });
+    async deletar(item) {
+      await this.FluxoService.remove(item.id);
+      this.$toasted.global.defaultSuccess();
+      this.getDados();
     },
-    getFluxos() {
-      this.$http
-        .get(`${urlApi}fluxos`)
-        .then(res => (this.fluxos = res.data))
-        .catch(erro => (this.erro = erro));
-    }
-  },
-  computed: {
-    alertComputed() {
-      return this.$store.state.alert;
+    async getDados() {
+      const data = await this.FluxoService.list();
+      this.fluxos = data;
     }
   },
   created() {
-    this.getFluxos();
+    this.getDados();
   }
 };
 </script>

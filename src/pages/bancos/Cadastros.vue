@@ -17,32 +17,24 @@
   </v-container>
 </template>
 <script>
-import urlApi from "@/config/urlApi";
+import BancoService from '@/service/Banco/BancoService'
 export default {
   data() {
     return {
+      BancoService: new BancoService(),
       banco: {},
       valid: false
     };
   },
   methods: {
-    atualizar() {
-      const id = this.banco.id ? this.banco.id : "";
-      const method = this.banco.id ? "put" : "post";
-      const url = `${urlApi}bancos/${id}`;
-      this.$http[method](url, this.banco).then(() => {
-        this.$store.dispatch("setAlert", {
-          show: true,
-          mensagem: "Operação realizada com sucesso",
-          type: "success"
-        });
-        this.$router.push({ path: `/bancos/` });
-      });
+    async atualizar() {
+      await this.BancoService.createOrUpdate(this.banco)
+      this.$toasted.global.defaultSuccess();
+      this.$router.push({ path: `/bancos/` });
     },
-    getDados(id) {
-      this.$http.get(`${urlApi}bancos/${id}`).then(res => {
-        this.banco = res.data;
-      });
+    async getDados(id) {
+      const data = await this.BancoService.show(id)
+      this.banco = data
     }
   },
   mounted() {

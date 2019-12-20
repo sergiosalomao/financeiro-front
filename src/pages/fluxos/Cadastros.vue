@@ -17,34 +17,28 @@
   </v-container>
 </template>
 <script>
-import urlApi from "@/config/urlApi";
+import FluxoService from "@/service/Fluxo/FluxoService";
 export default {
   data() {
     return {
+      FluxoService: new FluxoService(),
       items: [
         { value: "Debito", text: "Débito" },
         { value: "Credito", text: "Crédito" }
       ],
       fluxo: {},
-      valid: false,
+      valid: false
     };
   },
   methods: {
-    atualizar() {
-      const id = this.fluxo.id ? this.fluxo.id : "";
-      const method = this.fluxo.id ? "put" : "post";
-      const url = `${urlApi}fluxos/${id}`;
-      this.$http[method](url, this.fluxo).then(() => {
-        this.$store.dispatch('setAlert',{show: true, mensagem:'Operação realizada com sucesso',type:'success'})
-        this.$router.push({ path: `/fluxos/` });
-      });
+    async atualizar() {
+      await this.FluxoService.createOrUpdate(this.fluxo);
+      this.$toasted.global.defaultSuccess();
+      this.$router.push({ path: `/fluxos/` });
     },
-    getDados(id) {
-      this.$http
-        .get(`${urlApi}fluxos/${id}`)
-        .then(res => {
-          this.fluxo = res.data;
-        })
+    async getDados(id) {
+      const data = await this.FluxoService.show(id);
+      this.fluxo = data;
     }
   },
   mounted() {
