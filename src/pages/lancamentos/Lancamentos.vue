@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <v-col>
-      <h2>Lancamentos</h2>
+      <title-component titulo="Lancamentos" />
     </v-col>
     <alert-component
       v-if="alertComputed.show"
@@ -133,10 +133,11 @@ import ModalDelete from "@/components/modal/ModalDelete";
 import urlApi from "@/config/urlApi";
 import AlertComponent from "@/components/alert/AlertComponent";
 import queryString from "query-string";
+import TitleComponent from '@/components/title/TitleComponent'
 
 export default {
   name: "Lancamento",
-  components: { ModalDelete, AlertComponent },
+  components: { ModalDelete, AlertComponent,TitleComponent },
   data() {
     return {
       filtro: {},
