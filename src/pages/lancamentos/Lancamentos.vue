@@ -3,11 +3,7 @@
     <v-col>
       <title-component titulo="Lancamentos" />
     </v-col>
-    <alert-component
-      v-if="alertComputed.show"
-      :mensagem="alertComputed.mensagem"
-      :type="alertComputed.type"
-    />
+    
     <v-col>
       <v-btn color="success" class="mr-4" to="/lancamentos/cadastro">Novo Lancamento</v-btn>
     </v-col>
@@ -131,13 +127,13 @@
 <script>
 import ModalDelete from "@/components/modal/ModalDelete";
 import urlApi from "@/config/urlApi";
-import AlertComponent from "@/components/alert/AlertComponent";
 import queryString from "query-string";
 import TitleComponent from '@/components/title/TitleComponent'
+//import TableComponent from "@/components/table/TableComponent";
 
 export default {
   name: "Lancamento",
-  components: { ModalDelete, AlertComponent,TitleComponent },
+  components: { ModalDelete, TitleComponent },
   data() {
     return {
       filtro: {},
@@ -187,10 +183,8 @@ export default {
       fluxos: [],
       lancamentos: [],
       valid: false,
-      erro: "",
       show: false,
       lancamento: {},
-      typeAlert: null,
       saldoAtual: 0
     };
   },

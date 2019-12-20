@@ -73,7 +73,7 @@
     <v-col cols="12" md="10" sm="12">
       <v-card>
         <title-component titulo="Titulos" />
-        <table-component :titulo="`Total ${totalComputed}`" :headers="headers" :items="titulos">
+        <table-component :titulo="`Previsão do Fechamento ${saldoComputed}`" :headers="headers" :items="titulos">
         <template v-slot:acoes="{ item }">
            <v-icon v-if="item.status == 'Aberto'" class="mr-2" @click="atualizar(item.id)">mdi-table-edit</v-icon>
             <v-icon v-if="item.status == 'Aberto'" class="mr-2" @click="showModalDelete(item)">mdi-delete</v-icon>
@@ -240,6 +240,7 @@ export default {
     async getDados() {
     const data = await this.TituloService.search(this.filtro)
     this.titulos = data
+    this.getInformacoesDados()
     },
     
     async getContasDados() {
@@ -264,20 +265,16 @@ export default {
     
   },
   computed: {
-    // teste() {
-    //   this.titulos.filter(item => {
-    //     if(item.status == 'Aberto'){
-    //       return 
-    //     }
-    //   })
-    // },
-    totalComputed() {
+    saldoComputed() {
        let total = this.titulos.reduce((total, elem) => {
-        if (elem.status == "Aberto") {
+        if (elem.tipo == "Debito" ) {
+          return total - parseFloat(elem.valor);
+        } 
+
+        if (elem.tipo == "Credito" ) {
           return total + parseFloat(elem.valor);
-        } else {
-          return total + 0
         }
+        
       }, 0);
       return this.$options.filters.dinheiro(total);
     },
