@@ -11,7 +11,8 @@
                   <v-text-field
                     v-model="lancamento.data_lancamento"
                     label="Data"
-                    v-mask="'##/##/####'"
+                    type="date"
+                    
                   ></v-text-field>
                 </v-col>
               </v-row>

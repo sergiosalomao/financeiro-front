@@ -96,12 +96,14 @@
           <template v-slot:item.valor="{ item }">
             {{item.valor | dinheiro}}
           </template>
-           <template v-slot:item.valor="{ item }">
-            {{item.valor | dinheiro}}
-          </template>
+          
 
           <template v-slot:item.saldo="{ item }">
             {{item.saldo | dinheiro}}
+          </template>
+
+          <template v-slot:item.data_lancamento="{ item }">
+            {{item.data_lancamento | data}}
           </template>
              
              <template v-slot:item.titulo_id="{ item }">
