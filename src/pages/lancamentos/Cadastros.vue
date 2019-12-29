@@ -12,7 +12,7 @@
                     v-model="lancamento.data_lancamento"
                     label="Data"
                     type="date"
-                    
+                    outlined
                   ></v-text-field>
                 </v-col>
               </v-row>
@@ -20,6 +20,7 @@
               <v-row>
                 <v-col col="12" md="12">
                   <v-select
+                    outlined
                     v-model="lancamento.tipo"
                     label="Tipo"
                     :items="tipoItem"
@@ -30,30 +31,33 @@
 
               <v-row>
                 <v-col col="12" md="12">
-                  <v-select v-model="lancamento.conta_id" label="Conta" :items="contas"></v-select>
+                  <v-select outlined v-model="lancamento.conta_id" label="Conta" :items="contas"></v-select>
                 </v-col>
               </v-row>
 
               <v-row>
                 <v-col col="12" md="12" v-if="fluxos.length > 0">
-                  <v-select v-model="lancamento.fluxo_id" label="Fluxo" :items="fluxos"></v-select>
+                  <v-select outlined v-model="lancamento.fluxo_id" label="Fluxo" :items="fluxos"></v-select>
                 </v-col>
               </v-row>
 
               <v-row>
                 <v-col col="12" md="12">
-                  <v-text-field v-model="lancamento.valor" label="Valor"></v-text-field>
+                  <v-text-field 
+                  outlined
+                  v-model="lancamento.valor"
+                   label="Valor"
+                   ></v-text-field>
                 </v-col>
               </v-row>
 
-              <!-- <v-row>
-                <v-col col="12" md="12">
-                  <v-text-field v-model="lancamento.titulo_id" label="Titulo"></v-text-field>
-                </v-col>
-              </v-row> -->
               <v-row>
                 <v-col col="12" md="12">
-                  <v-text-field v-model="lancamento.descricao" label="Descricao"></v-text-field>
+                  <v-text-field
+                  outlined
+                   v-model="lancamento.descricao"
+                    label="Descricao"
+                    ></v-text-field>
                 </v-col>
               </v-row>
               <v-btn

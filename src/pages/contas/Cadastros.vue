@@ -10,9 +10,9 @@
         <v-card>
           <v-card-text>
             <v-form ref="form" v-model="valid" lazy-validation>
-              <v-select v-model="conta.banco_id" label="Banco" :items="bancos"></v-select>
-              <v-text-field v-model="conta.agencia" label="Agencia"></v-text-field>
-              <v-text-field v-model="conta.descricao" label="Conta"></v-text-field>
+              <v-select outlined v-model="conta.banco_id" label="Banco" :items="bancos"></v-select>
+              <v-text-field outlined v-model="conta.agencia" label="Agencia"></v-text-field>
+              <v-text-field outlined v-model="conta.descricao" label="Conta"></v-text-field>
               <v-btn :disabled="!valid" color="success" class="mr-4" @click="atualizar">Atualizar</v-btn>
             </v-form>
           </v-card-text>

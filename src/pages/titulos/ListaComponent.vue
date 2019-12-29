@@ -5,6 +5,7 @@
       <v-list-item-content>
         <v-list-item-title class="font-weight-black">{{item.text}}</v-list-item-title>
         <v-list-item-title >{{item.value |dinheiro}}</v-list-item-title>
+    
       </v-list-item-content>
     </v-list-item>
   </v-card>

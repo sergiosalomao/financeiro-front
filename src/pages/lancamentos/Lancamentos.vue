@@ -80,8 +80,9 @@
         <v-data-table
           :headers="headers"
           :items="lancamentos"
-          hide-default-footer
+        
           class="elevation-1"
+          :items-per-page="10"
         >
           <template v-slot:top>
             <v-toolbar flat>
@@ -218,6 +219,7 @@ export default {
     getDados() {
       const filtros = queryString.stringify(this.filtro);
       const url = `${urlApi}lancamentos?${filtros}`;
+      console.log(url)
       this.$http
         .get(url)
         .then(res => {

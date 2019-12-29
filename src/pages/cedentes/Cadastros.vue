@@ -6,7 +6,7 @@
         <v-card>
           <v-card-text>
             <v-form ref="form" v-model="valid" lazy-validation>
-              <v-text-field v-model="cedente.descricao" label="Cedente"></v-text-field>
+              <v-text-field outlined v-model="cedente.descricao" label="Cedente"></v-text-field>
               <v-btn :disabled="!valid" color="success" class="mr-4" @click="atualizar">Gravar</v-btn>
             </v-form>
           </v-card-text>

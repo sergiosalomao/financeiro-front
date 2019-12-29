@@ -6,8 +6,8 @@
         <v-card>
           <v-card-text>
             <v-form ref="form" v-model="valid" lazy-validation>
-              <v-text-field v-model="fluxo.descricao" label="Fluxo"></v-text-field>
-              <v-select v-model="fluxo.tipo" label="tipo" :items="items"></v-select>
+              <v-text-field outlined v-model="fluxo.descricao" label="Fluxo"></v-text-field>
+              <v-select outlined v-model="fluxo.tipo" label="tipo" :items="items"></v-select>
               <v-btn :disabled="!valid" color="success" class="mr-4" @click="atualizar">Gravar</v-btn>
             </v-form>
           </v-card-text>

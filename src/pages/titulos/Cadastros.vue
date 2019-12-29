@@ -8,13 +8,14 @@
             <v-form ref="form" v-model="valid" lazy-validation>
               <v-row>
                 <v-col col="12" md="12">
-                  <v-text-field v-model="titulo.vencimento" label="Vencimento" type="date"></v-text-field>
+                  <v-text-field outlined v-model="titulo.vencimento" label="Vencimento" type="date"></v-text-field>
                 </v-col>
               </v-row>
 
               <v-row>
                 <v-col col="12" md="12">
                   <v-select
+                    outlined
                     v-model="titulo.tipo"
                     label="Tipo"
                     :items="tipoItem"
@@ -25,24 +26,24 @@
 
               <v-row>
                 <v-col col="12" md="12">
-                  <v-select v-model="titulo.conta_id" label="Conta" :items="contas"></v-select>
+                  <v-select outlined v-model="titulo.conta_id" label="Conta" :items="contas"></v-select>
                 </v-col>
               </v-row>
 
               <v-row>
                 <v-col col="12" md="12" v-if="fluxos.length > 0">
-                  <v-select v-model="titulo.fluxo_id" label="Fluxo" :items="fluxos"></v-select>
+                  <v-select outlined v-model="titulo.fluxo_id" label="Fluxo" :items="fluxos"></v-select>
                 </v-col>
               </v-row>
 
               <v-row>
                 <v-col col="12" md="12">
-                  <v-text-field v-model="titulo.valor" label="Valor"></v-text-field>
+                  <v-text-field outlined v-model="titulo.valor" label="Valor"></v-text-field>
                 </v-col>
               </v-row>
               <v-row>
                 <v-col col="12" md="10">
-                  <v-select v-model="titulo.cedente_id" label="Cedente" :items="cedentes"></v-select>
+                  <v-select outlined v-model="titulo.cedente_id" label="Cedente" :items="cedentes"></v-select>
                 </v-col>
                 <v-col col="12" md="2">
                   <v-btn color="success" class="mr-4" to="/cedentes/cadastro">Adicionar Cedente</v-btn>
@@ -50,7 +51,7 @@
               </v-row>
               <v-row>
                 <v-col col="12" md="12">
-                  <v-text-field v-model="titulo.sacado" label="Sacado"></v-text-field>
+                  <v-text-field outlined v-model="titulo.sacado" label="Sacado"></v-text-field>
                 </v-col>
               </v-row>
               <v-btn

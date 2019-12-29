@@ -74,6 +74,7 @@
       <v-card>
         <title-component titulo="Titulos" />
         <table-component :titulo="`Previsão do Fechamento ${saldoComputed}`" :headers="headers" :items="titulos">
+        
         <template v-slot:acoes="{ item }">
            <v-icon v-if="item.status == 'Aberto'" class="mr-2" @click="atualizar(item.id)">mdi-table-edit</v-icon>
             <v-icon v-if="item.status == 'Aberto'" class="mr-2" @click="showModalDelete(item)">mdi-delete</v-icon>
@@ -84,14 +85,7 @@
       </v-card>
     </v-col>
     <v-col cols="12" md="2" sm="6">
-      <!-- <v-card>
-        <v-card-title>Informações</v-card-title>
-        <v-list-item v-for="(item, index) in informacoes" :key="index">
-          <v-list-item-content>
-            <v-list-item-title>{{item.text}}: {{item.value}}</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-card> -->
+  
       <lista-component :dados="informacoes" /> 
     </v-col>
   </v-row>
@@ -181,6 +175,10 @@ export default {
         {
           text: "Status",
           value: "status"
+        },
+         {
+          text: "Data Pagamento",
+          value: "data_pagamento"
         },
         {
           text: "Ações",

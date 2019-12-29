@@ -9,12 +9,16 @@
               <v-select v-model="cont" label="Conta " :items="contas"></v-select>
             </v-col>
 
+                <v-col col="12" md="12">
+                  <v-text-field outlined v-model="data_pagamento" label="Data Pagamento" type="date"></v-text-field>
+                </v-col>
+ 
             <v-col col="12" md="2">
               <v-btn color="orange darken-1" class="mr-4" @click="fecharModalBaixaTitulo">Fechar</v-btn>
             </v-col>
 
             <v-col col="12" md="2">
-              <v-btn color="green darken-1" class="mr-4" @click="confirm(cont)">Baixar</v-btn>
+              <v-btn color="green darken-1" class="mr-4" @click="confirm(cont,data_pagamento)">Baixar</v-btn>
             </v-col>
           </v-row>
         </v-container>
@@ -31,12 +35,14 @@ export default {
     return {
       filtro: "",
       contas: [],
-      cont: ""
+      cont: "",
+      data_pagamento:"",
     };
   },
   methods: {
-    confirm(cont) {
+    confirm(cont,data_pagamento) {
       this.item.conta_id = cont;
+      this.item.data_pagamento = data_pagamento;
       this.item.status = "Pago";
       const url = `${urlApi}titulos/${this.item.id}`;
       this.$http
