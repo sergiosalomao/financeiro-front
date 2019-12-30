@@ -11,7 +11,8 @@
                   <v-text-field
                     v-model="lancamento.data_lancamento"
                     label="Data"
-                    v-mask="'##/##/####'"
+                    type="date"
+                    outlined
                   ></v-text-field>
                 </v-col>
               </v-row>
@@ -19,6 +20,7 @@
               <v-row>
                 <v-col col="12" md="12">
                   <v-select
+                    outlined
                     v-model="lancamento.tipo"
                     label="Tipo"
                     :items="tipoItem"
@@ -29,38 +31,39 @@
 
               <v-row>
                 <v-col col="12" md="12">
-                  <v-select v-model="lancamento.conta_id" label="Conta" :items="contas"></v-select>
+                  <v-select outlined v-model="lancamento.conta_id" label="Conta" :items="contas"></v-select>
                 </v-col>
               </v-row>
 
               <v-row>
-                <v-col col="12" md="12" v-if="fluxos.length > 0">
-                  <v-select v-model="lancamento.fluxo_id" label="Fluxo" :items="fluxos"></v-select>
+                <v-col col="10" md="10" v-if="fluxos.length > 0">
+                  <v-select outlined v-model="lancamento.fluxo_id" label="Fluxo" :items="fluxos"></v-select>
+                </v-col>
+                <v-col col="2" md="2" v-if="fluxos.length > 0">
+                  <v-btn color="success" class="mr-4" to="/fluxos/cadastro">Adicionar Fluxo</v-btn>
                 </v-col>
               </v-row>
 
               <v-row>
                 <v-col col="12" md="12">
-                  <v-text-field v-model="lancamento.valor" label="Valor"></v-text-field>
+                  <v-text-field outlined v-model="lancamento.valor" label="Valor"></v-text-field>
                 </v-col>
               </v-row>
 
-              <!-- <v-row>
-                <v-col col="12" md="12">
-                  <v-text-field v-model="lancamento.titulo_id" label="Titulo"></v-text-field>
-                </v-col>
-              </v-row> -->
               <v-row>
                 <v-col col="12" md="12">
-                  <v-text-field v-model="lancamento.descricao" label="Descricao"></v-text-field>
+                  <v-text-field outlined v-model="lancamento.descricao" label="Descricao"></v-text-field>
                 </v-col>
               </v-row>
+              <v-btn color="primary" class="mr-4" @click="$router.go(-1)">Voltar</v-btn>
               <v-btn
                 :disabled="!fluxos.length > 0"
                 color="success"
                 class="mr-4"
                 @click="atualizar"
               >Gravar</v-btn>
+
+           
             </v-form>
           </v-card-text>
         </v-card>
@@ -70,11 +73,17 @@
 </template>
 <script>
 import { VMoney } from "v-money";
-import urlApi from "@/config/urlApi";
+
+import ContaService from "@/service/Conta/ContaService"
+import FluxoService from "@/service/Fluxo/FluxoService"
+import LancamentoService from "@/service/lancamento/LancamentoService"
 export default {
   directives: { money: VMoney },
   data() {
     return {
+      ContaService : new ContaService(),
+      FluxoService : new FluxoService(),
+      LancamentoService : new LancamentoService(),
       moneyConfig: {
         decimal: ",",
         thousands: ".",
@@ -92,59 +101,42 @@ export default {
     };
   },
   methods: {
-    getFluxoByTipo(tipo) {
-      this.$http
-        .get(`${urlApi}fluxos?tipo=${tipo}`)
-        .then(res => {
-          this.fluxos = res.data.map(item => {
+    async getFluxoByTipo(tipo) {
+         
+          const data = await this.FluxoService.search({tipo:tipo})
+         
+          this.fluxos = data.map(item => {
             return { text: item.descricao, value: item.id };
-          });
-        })
-        .catch(erro => {
-          this.erro = erro;
-        });
+          })
+
+        
     },
-    atualizar() {
-      const id = this.lancamento.id ? this.lancamento.id : "";
-      const method = this.lancamento.id ? "put" : "post";
-      const url = `${urlApi}lancamentos/${id}`;
-      this.$http[method](url, this.lancamento).then(() => {
-        this.$store.dispatch("setAlert", {
-          show: true,
-          mensagem: "Operação realizada com sucesso",
-          type: "success"
-        });
-        this.$router.push({ path: `/lancamentos/` });
-      });
+    async atualizar() {
+      await this.LancamentoService.createOrUpdate(this.lancamento)
+       this.$router.push({ path: `/lancamentos/` });
+   
     },
-    getDados(id) {
-      this.$http.get(`${urlApi}lancamentos/${id}`).then(res => {
-        (this.lancamento = {
-          ...res.data,
-          fluxo_id: res.data.fluxo.id,
-          conta_id: res.data.conta.id,
-          valor: parseFloat(res.data.valor)
-        }),
-          // eslint-disable-next-line no-console
-          console.log(this.lancamento);
-        this.getFluxoByTipo(res.data.tipo);
-      });
+    async getDados(id) {
+     
+      const data = await this.LancamentoService.show(id)
+          
+          this.lancamento = {
+          ...data,
+          fluxo_id: data.fluxo.id,
+          conta_id: data.conta.id,
+          valor: parseFloat(data.valor)
+        }
+               this.getFluxoByTipo(data.tipo);
+      
     },
 
-    getContasDados() {
-      this.$http
-        .get(`${urlApi}contas`)
-        .then(res => {
-          // eslint-disable-next-line no-console
-          // console.log(res.data);
-          this.contas = res.data.map(item => {
+    async getContasDados() {
+      const data = await this.ContaService.list()
+          this.contas = data.map(item => {
             return { text: item.descricao, value: item.id };
           });
-        })
-        .catch(erro => {
-          this.erro = erro;
-        });
     }
+      
   },
   mounted() {
     if (this.$route.params.id) {

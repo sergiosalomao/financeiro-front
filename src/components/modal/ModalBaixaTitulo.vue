@@ -9,12 +9,16 @@
               <v-select v-model="cont" label="Conta " :items="contas"></v-select>
             </v-col>
 
+                <v-col col="12" md="12">
+                  <v-text-field outlined v-model="data_pagamento" label="Data Pagamento" type="date"></v-text-field>
+                </v-col>
+ 
             <v-col col="12" md="2">
               <v-btn color="orange darken-1" class="mr-4" @click="fecharModalBaixaTitulo">Fechar</v-btn>
             </v-col>
 
             <v-col col="12" md="2">
-              <v-btn color="green darken-1" class="mr-4" @click="confirm(cont)">Baixar</v-btn>
+              <v-btn color="green darken-1" class="mr-4" @click="confirm(cont,data_pagamento)">Baixar</v-btn>
             </v-col>
           </v-row>
         </v-container>
@@ -23,48 +27,42 @@
   </div>
 </template>
 <script>
-import urlApi from "@/config/urlApi";
+
+import ContaService from "@/service/Conta/ContaService"
+import TituloService from "@/service/Titulo/TituloService"
 export default {
   name: "ModalBaixaTitulo",
   props: ["item", "dialog"],
   data() {
     return {
+      ContaService :new ContaService(),
+        TituloService :new TituloService(),
       filtro: "",
       contas: [],
-      cont: ""
+      cont: "",
+      data_pagamento:"",
     };
   },
   methods: {
-    confirm(cont) {
+    async confirm(cont,data_pagamento) {
       this.item.conta_id = cont;
+      this.item.data_pagamento = data_pagamento;
       this.item.status = "Pago";
-      const url = `${urlApi}titulos/${this.item.id}`;
-      this.$http
-        .put(url, this.item)
-        .then(() => {
-          this.fecharModalBaixaTitulo();
-        })
-        .catch(() => {});
-
-      //   this.$emit("baixaTitulo", this.cont);
-      //   this.$emit("fechar");
+   
+      await this.TituloService.createOrUpdate(this.item)
+      this.fecharModalBaixaTitulo();
+    
     },
     fecharModalBaixaTitulo() {
       this.cont = "";
       this.$emit("fechar");
     },
-    getContasDados() {
-      this.$http
-        .get(`${urlApi}contas`)
-        .then(res => {
-          this.contas = res.data.map(item => {
-            return { text: item.descricao, value: item.id };
-          });
-        })
-        .catch(erro => {
-          this.erro = erro;
-        });
-    }
+    async getContasDados() {
+     const data = await this.ContaService.list()
+       this.contas = data.map(item=>{
+        return { text: item.descricao, value: item.id }
+       })
+  },
   },
   created() {
     this.getContasDados();

@@ -53,9 +53,10 @@ export default {
       ],
       fluxos: [],
       show: false,
-      fluxo: {},
+      fluxo: {}
     };
   },
+
   methods: {
     showModalDelete(item) {
       this.fluxo = item;
@@ -74,6 +75,7 @@ export default {
       this.fluxos = data;
     }
   },
+  
   created() {
     this.getDados();
   }

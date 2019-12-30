@@ -9,6 +9,7 @@
     <v-col>
       <table-component :headers="headers" :items="contas">
         <template v-slot:acoes="{ item }">
+        
           <v-icon class="mr-2" @click="atualizar(item.id)">mdi-table-edit</v-icon>
           <v-icon class="mr-2" @click="showModalDelete(item)">mdi-delete</v-icon>
         </template>
@@ -24,8 +25,9 @@ import TableComponent from "@/components/table/TableComponent";
 import ContaService from "@/service/Conta/ContaService";
 
 export default {
-  components: { ModalDelete, TitleComponent, TableComponent },
   name: "Conta",
+  components: { ModalDelete, TitleComponent, TableComponent },
+ 
   data() {
     return {
       ContaService: new ContaService(),
@@ -52,7 +54,8 @@ export default {
       conta: {}
     };
   },
-  methods: {
+ 
+ methods: {
     showModalDelete(item) {
       this.conta = item;
       this.show = true;
@@ -70,7 +73,8 @@ export default {
       this.contas = data;
     }
   },
-  created() {
+ 
+ created() {
     this.getDados();
   }
 };

@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <v-col>
-    <title-component titulo="Bancos" />
+      <title-component titulo="Bancos" />
     </v-col>
     <v-col>
       <v-btn color="success" class="mr-4" to="/bancos/cadastro">Adicionar</v-btn>
@@ -26,6 +26,7 @@ import BancoService from "@/service/Banco/BancoService";
 export default {
   name: "Banco",
   components: { ModalDelete, TableComponent, TitleComponent },
+
   data() {
     return {
       BancoService: new BancoService(),
@@ -34,12 +35,10 @@ export default {
           text: "Numero",
           value: "numero"
         },
-
         {
           text: "Banco",
           value: "descricao"
         },
-
         {
           text: "Ações",
           value: "action"
@@ -50,6 +49,7 @@ export default {
       banco: {}
     };
   },
+  
   methods: {
     showModalDelete(item) {
       this.banco = item;
@@ -68,6 +68,7 @@ export default {
       this.bancos = data;
     }
   },
+
   created() {
     this.getDados();
   }
