@@ -3,10 +3,12 @@
     <v-col>
       <title-component titulo="Lancamentos" />
     </v-col>
+    
     <v-col>
       <v-btn color="success" class="mr-4" to="/lancamentos/cadastro">Novo Lancamento</v-btn>
     </v-col>
     <v-col>
+      
       <template>
   <v-expansion-panels>
     <v-expansion-panel
@@ -15,6 +17,8 @@
     >
       <v-expansion-panel-header class="title">Filtros</v-expansion-panel-header>
       <v-expansion-panel-content>
+       
+
           <v-row>
             <v-col col="12" md="2">
               <v-text-field v-model="filtro.datainicio" label="Data Inicio" v-mask="'##/##/####'"></v-text-field>
@@ -49,18 +53,31 @@
               ></v-autocomplete>
             </v-col>
           </v-row>
+       
         <v-divider></v-divider>
+     
           <div class="flex-grow-1"></div>
           <v-btn color="primary" @click="getDados()">Filtrar</v-btn>
+  
+
+
+
+
+
       </v-expansion-panel-content>
     </v-expansion-panel>
   </v-expansion-panels>
 </template>
-      <v-col>
+      
+
+
+
+    </v-col>
+
     <v-col>
       <v-card>
         <v-card-title>Lançamentos</v-card-title>
-        <v-data-table 
+        <v-data-table
           :headers="headers"
           :items="lancamentos"
         
@@ -80,7 +97,8 @@
           <template v-slot:item.valor="{ item }">
             {{item.valor | dinheiro}}
           </template>
-      
+          
+
           <template v-slot:item.saldo="{ item }">
             {{item.saldo | dinheiro}}
           </template>

@@ -7,69 +7,66 @@
       <v-btn color="success" class="mr-4" to="/titulos/cadastro">Novo Titulo</v-btn>
     </v-col>
     <v-col>
-      <template>
-        <v-expansion-panels>
-          <v-expansion-panel v-for="(item,i) in 1" :key="i">
-            <v-expansion-panel-header class="title">Filtros</v-expansion-panel-header>
-            <v-expansion-panel-content>
-              <v-row>
-                <v-col col="12" md="2">
-                  <v-text-field
-                    v-model="filtro.datainicio"
-                    label="Data Inicio"
-                    v-mask="'##/##/####'"
-                  ></v-text-field>
-                </v-col>
-                <v-col col="12" md="2">
-                  <v-text-field v-model="filtro.datafinal" label="Data Final" v-mask="'##/##/####'"></v-text-field>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col col="12" md="4">
-                  <v-autocomplete
-                    v-model="filtro.conta_id"
-                    :items="contas"
-                    outlined
-                    dense
-                    chips
-                    small-chips
-                    label="Contas"
-                    multiple
-                  ></v-autocomplete>
-                </v-col>
-                <v-col col="12" md="4">
-                  <v-autocomplete
-                    v-model="filtro.fluxo_id"
-                    :items="fluxos"
-                    outlined
-                    dense
-                    chips
-                    small-chips
-                    label="Fluxos"
-                    multiple
-                  ></v-autocomplete>
-                </v-col>
-                <v-col col="12" md="4">
-                  <v-autocomplete
-                    v-model="filtro.status"
-                    :items="status"
-                    outlined
-                    dense
-                    chips
-                    small-chips
-                    label="Status"
-                  ></v-autocomplete>
-                </v-col>
-              </v-row>
-              <v-divider></v-divider>
-              <div class="flex-grow-1"></div>
-              <v-btn color="primary" @click="getDados()">Filtrar</v-btn>
-            </v-expansion-panel-content>
-          </v-expansion-panel>
-        </v-expansion-panels>
-      </template>
-    </v-col>
-  </v-container>
+<template>
+  <v-expansion-panels>
+    <v-expansion-panel
+      v-for="(item,i) in 1"
+      :key="i"
+    >
+      <v-expansion-panel-header class="title">Filtros</v-expansion-panel-header>
+      <v-expansion-panel-content>
+              
+          <v-row>
+            <v-col col="12" md="2">
+              <v-text-field v-model="filtro.datainicio" label="Data Inicio" v-mask="'##/##/####'"></v-text-field>
+            </v-col>
+            <v-col col="12" md="2">
+              <v-text-field v-model="filtro.datafinal" label="Data Final" v-mask="'##/##/####'"></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col col="12" md="4">
+              <v-autocomplete
+                v-model="filtro.conta_id"
+                :items="contas"
+                outlined
+                dense
+                chips
+                small-chips
+                label="Contas"
+                multiple
+              ></v-autocomplete>
+            </v-col>
+            <v-col col="12" md="4">
+              <v-autocomplete
+                v-model="filtro.fluxo_id"
+                :items="fluxos"
+                outlined
+                dense
+                chips
+                small-chips
+                label="Fluxos"
+                multiple
+              ></v-autocomplete>
+            </v-col>
+            <v-col col="12" md="4">
+              <v-autocomplete
+                v-model="filtro.status"
+                :items="status"
+                outlined
+                dense
+                chips
+                small-chips
+                label="Status"
+              ></v-autocomplete>
+            </v-col>
+          </v-row>
+        <v-divider></v-divider>
+          <div class="flex-grow-1"></div>
+          <v-btn color="primary" @click="getDados()">Filtrar</v-btn>
+      </v-expansion-panel-content>
+    </v-expansion-panel>
+  </v-expansion-panels>
 </template>
     </v-col>
     <v-row>
@@ -79,15 +76,11 @@
         <table-component :titulo="`Previsão do Fechamento ${saldoComputed}`" :headers="headers" :items="titulos">
         
         <template v-slot:acoes="{ item }">
-  <v-icon v-if="item.status == 'Aberto'" class="mr-2" @click="atualizar(item.id)">mdi-table-edit</v-icon>
-  <v-icon v-if="item.status == 'Aberto'" class="mr-2" @click="showModalDelete(item)">mdi-delete</v-icon>
-  <v-icon
-    v-if="item.status == 'Aberto'"
-    class="mr-2"
-    @click="showModalBaixaTitulo(item)"
-  >mdi-checkbox-marked-circle</v-icon>
-  <v-icon v-if="item.status == 'Pago'" class="mr-2" @click="showModalCancelaBaixa(item)">mdi-update</v-icon>
-</template>
+           <v-icon v-if="item.status == 'Aberto'" class="mr-2" @click="atualizar(item.id)">mdi-table-edit</v-icon>
+            <v-icon v-if="item.status == 'Aberto'" class="mr-2" @click="showModalDelete(item)">mdi-delete</v-icon>
+            <v-icon v-if="item.status == 'Aberto'" class="mr-2" @click="showModalBaixaTitulo(item)">mdi-checkbox-marked-circle</v-icon>
+            <v-icon v-if="item.status == 'Pago'"   class="mr-2" @click="showModalCancelaBaixa(item)">mdi-update</v-icon>
+        </template>
         </table-component>
       </v-card>
     </v-col>
