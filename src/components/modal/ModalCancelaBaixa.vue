@@ -13,23 +13,22 @@
   </div>
 </template>
 <script>
-import urlApi from "@/config/urlApi";
+
+import TituloService from "@/service/Titulo/TituloService"
 export default {
   name: "ModalCancelaBaixa",
   props: ["item", "dialog"],
   data() {
-    return {};
+    return {
+      TituloService : new TituloService(),
+    };
   },
   methods: {
-    confirm() {
+    async confirm() {
       this.item.status = "Aberto";
-      const url = `${urlApi}titulos/${this.item.id}`;
-      this.$http
-        .put(url, this.item)
-        .then(() => {
+      await this.TituloService.createOrUpdate(this.item)
           this.fecharModalCancelaBaixa();
-        })
-        .catch(() => {});
+     
     },
     fecharModalCancelaBaixa() {
       this.$emit("fechar");

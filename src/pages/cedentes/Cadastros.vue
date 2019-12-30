@@ -7,6 +7,7 @@
           <v-card-text>
             <v-form ref="form" v-model="valid" lazy-validation>
               <v-text-field outlined v-model="cedente.descricao" label="Cedente"></v-text-field>
+              <v-btn color="primary" class="mr-4" @click="$router.go(-1)">Voltar</v-btn>
               <v-btn :disabled="!valid" color="success" class="mr-4" @click="atualizar">Gravar</v-btn>
             </v-form>
           </v-card-text>
@@ -16,26 +17,27 @@
   </v-container>
 </template>
 <script>
-import CedenteService from "@/service/cedente/CedenteService"
+import CedenteService from "@/service/cedente/CedenteService";
 export default {
   data() {
     return {
-      CedenteService : new CedenteService(),
+      CedenteService: new CedenteService(),
       cedente: {},
-      valid: false,
     };
   },
+
   methods: {
     async atualizar() {
-     await this.CedenteService.createOrUpdate(this.cedente);
+      await this.CedenteService.createOrUpdate(this.cedente);
       this.$toasted.global.defaultSuccess();
       this.$router.push({ path: `/cedentes/` });
     },
     async getDados(id) {
-      const data = await this.CedenteService.show(id)
-      this.cedente = data
+      const data = await this.CedenteService.show(id);
+      this.cedente = data;
     }
   },
+  
   mounted() {
     if (this.$route.params.id) {
       this.getDados(this.$route.params.id);

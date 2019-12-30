@@ -8,6 +8,7 @@
             <v-form ref="form" v-model="valid" lazy-validation>
               <v-text-field outlined v-model="fluxo.descricao" label="Fluxo"></v-text-field>
               <v-select outlined v-model="fluxo.tipo" label="tipo" :items="items"></v-select>
+                  <v-btn color="primary" class="mr-4" @click="$router.go(-1)">Voltar</v-btn>
               <v-btn :disabled="!valid" color="success" class="mr-4" @click="atualizar">Gravar</v-btn>
             </v-form>
           </v-card-text>
@@ -18,6 +19,7 @@
 </template>
 <script>
 import FluxoService from "@/service/Fluxo/FluxoService";
+
 export default {
   data() {
     return {
@@ -27,9 +29,9 @@ export default {
         { value: "Credito", text: "Crédito" }
       ],
       fluxo: {},
-      valid: false
     };
   },
+
   methods: {
     async atualizar() {
       await this.FluxoService.createOrUpdate(this.fluxo);
@@ -41,6 +43,7 @@ export default {
       this.fluxo = data;
     }
   },
+  
   mounted() {
     if (this.$route.params.id) {
       this.getDados(this.$route.params.id);

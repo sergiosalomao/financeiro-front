@@ -14,16 +14,12 @@ import Titulos from '@/pages/titulos/Titulos'
 import CadastrosTitulos from '@/pages/titulos/Cadastros'
 import Cedentes from '@/pages/cedentes/Cedentes'
 import CadastrosCedentes from '@/pages/cedentes/Cadastros'
-
 import store from '@/store/store'
 
 Vue.use(VueRouter);
 
 const ifAuthenticated = (to, from, next) => {
     if (store.getters['isAuthenticated']) {
-        // if (to.matched.some(record => record.meta.admin)) {
-        //     localStorage.getItem('user-admin') == 0 ? next('/') : next()
-        // }
         next()
         return
     }

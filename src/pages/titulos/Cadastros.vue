@@ -31,8 +31,11 @@
               </v-row>
 
               <v-row>
-                <v-col col="12" md="12" v-if="fluxos.length > 0">
+                <v-col col="10" md="10" v-if="fluxos.length > 0">
                   <v-select outlined v-model="titulo.fluxo_id" label="Fluxo" :items="fluxos"></v-select>
+                </v-col>
+                <v-col col="2" md="2" v-if="fluxos.length > 0">
+                  <v-btn color="success" class="mr-4" to="/fluxos/cadastro">Adicionar Fluxo</v-btn>
                 </v-col>
               </v-row>
 
@@ -54,6 +57,7 @@
                   <v-text-field outlined v-model="titulo.sacado" label="Sacado"></v-text-field>
                 </v-col>
               </v-row>
+                  <v-btn color="primary" class="mr-4" @click="$router.go(-1)">Voltar</v-btn>
               <v-btn
                 :disabled="!fluxos.length > 0"
                 color="success"
@@ -68,17 +72,19 @@
   </v-container>
 </template>
 <script>
-import urlApi from "@/config/urlApi";
-//import ContaService from "@/service/Conta/ContaService";
+
+import ContaService from "@/service/Conta/ContaService";
 import TituloService from "@/service/Titulo/TituloService";
 import FluxoService from "@/service/Fluxo/FluxoService";
+import CedenteService from "@/service/cedente/CedenteService";
 
 export default {
   data() {
     return {
       FluxoService: new FluxoService(),
-      //ContaService :new ContaService(),
+      ContaService :new ContaService(),
       TituloService: new TituloService(),
+      CedenteService: new CedenteService(),
 
       moneyConfig: {
         decimal: ",",
@@ -97,6 +103,7 @@ export default {
       valid: false
     };
   },
+
   methods: {
     async getFluxoByTipo(tipo) {
       const data = await this.FluxoService.search({ tipo: tipo });
@@ -110,9 +117,7 @@ export default {
       this.$router.push({ path: `/titulos/` });
     },
     async getDados(id) {
-      console.log(id)
       const data = await this.TituloService.show(id);
-      console.log(data)
       this.titulo = {
         ...data,
         fluxo_id: data.fluxo.id,
@@ -122,37 +127,20 @@ export default {
       },
         this.getFluxoByTipo(data.tipo);
     },
-
-    getContasDados() {
-      this.$http
-        .get(`${urlApi}contas`)
-        .then(res => {
-          // eslint-disable-next-line no-console
-          // console.log(res.data);
-          this.contas = res.data.map(item => {
+    async getContasDados() {
+        const data = await this.ContaService.list()
+        this.contas = data.map(item => {
             return { text: item.descricao, value: item.id };
           });
-        })
-        .catch(erro => {
-          this.erro = erro;
-        });
     },
-
-    getCedentesDados() {
-      this.$http
-        .get(`${urlApi}cedentes`)
-        .then(res => {
-          // eslint-disable-next-line no-console
-          // console.log(res.data);
-          this.cedentes = res.data.map(item => {
+    async getCedentesDados() {
+      const data = await this.CedenteService.lsit()
+      this.cedentes = data.map(item => {
             return { text: item.descricao, value: item.id };
           });
-        })
-        .catch(erro => {
-          this.erro = erro;
-        });
     }
   },
+
   mounted() {
     if (this.$route.params.id) {
       this.getDados(this.$route.params.id);

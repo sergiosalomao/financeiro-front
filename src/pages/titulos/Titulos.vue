@@ -86,7 +86,7 @@
     </v-col>
     <v-col cols="12" md="2" sm="6">
   
-      <lista-component :dados="informacoes" /> 
+      <info-component :dados="informacoes" /> 
     </v-col>
   </v-row>
     <modal-delete
@@ -116,17 +116,17 @@
 import ModalDelete from "@/components/modal/ModalDelete";
 import ModalBaixaTitulo from "@/components/modal/ModalBaixaTitulo";
 import ModalCancelaBaixa from "@/components/modal/ModalCancelaBaixa";
-import urlApi from "@/config/urlApi";
+
 import TitleComponent from "@/components/title/TitleComponent";
 import TableComponent from "@/components/table/TableComponent";
 import ContaService from "@/service/Conta/ContaService";
 import TituloService from "@/service/Titulo/TituloService";
 import FluxoService from "@/service/Fluxo/FluxoService";
-import ListaComponent from './ListaComponent'
+import InfoComponent from './InfoComponent'
 
 export default {
   name: "Titulo",
-  components: { ModalDelete,  ModalBaixaTitulo,ModalCancelaBaixa,TableComponent,TitleComponent, ListaComponent },
+  components: { ModalDelete,  ModalBaixaTitulo,ModalCancelaBaixa,TableComponent,TitleComponent, InfoComponent },
   data() {
     return {
       informacoes: [],
@@ -196,8 +196,7 @@ export default {
       showModalBaixaTit: false,
       tituloCancelaBaixa: {},
       showModalCancelaBaixaTit: false,
-      saldoAtual: 0,
-      
+      saldoAtual: 0,      
     };
   },
   methods: {
@@ -224,16 +223,10 @@ export default {
     atualizar(id) {
       this.$router.push({ path: `/titulos/editar/${id}` });
     },
-    deletar(item) {
-      const url = `${urlApi}titulos/${item.id}`;
-      this.$http.delete(url).then(() => {
-        this.getDados();
-        this.$store.dispatch("setAlert", {
-          show: true,
-          mensagem: "Excluido com sucesso",
-          type: "error"
-        });
-      });
+      async deletar(item) {
+      await this.TituloService.remove(item.id);
+      this.$toasted.global.defaultSuccess();
+      this.getDados();
     },
     async getDados() {
     const data = await this.TituloService.search(this.filtro)
@@ -246,9 +239,7 @@ export default {
       this.contas = data.map(item=>{
         return {text: item.descricao, value: item.id}
       })
-      
     },
-    
     async getFluxosDados() {
       const data = await this.FluxoService.list()
       this.fluxos = data.map(item=>{
@@ -260,19 +251,17 @@ export default {
       console.log(data)
       this.informacoes =  data 
     },
-    
   },
+
   computed: {
     saldoComputed() {
        let total = this.titulos.reduce((total, elem) => {
         if (elem.tipo == "Debito" ) {
           return total - parseFloat(elem.valor);
         } 
-
         if (elem.tipo == "Credito" ) {
           return total + parseFloat(elem.valor);
         }
-        
       }, 0);
       return this.$options.filters.dinheiro(total);
     },
