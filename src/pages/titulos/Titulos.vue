@@ -7,66 +7,69 @@
       <v-btn color="success" class="mr-4" to="/titulos/cadastro">Novo Titulo</v-btn>
     </v-col>
     <v-col>
-<template>
-  <v-expansion-panels>
-    <v-expansion-panel
-      v-for="(item,i) in 1"
-      :key="i"
-    >
-      <v-expansion-panel-header class="title">Filtros</v-expansion-panel-header>
-      <v-expansion-panel-content>
-              
-          <v-row>
-            <v-col col="12" md="2">
-              <v-text-field v-model="filtro.datainicio" label="Data Inicio" v-mask="'##/##/####'"></v-text-field>
-            </v-col>
-            <v-col col="12" md="2">
-              <v-text-field v-model="filtro.datafinal" label="Data Final" v-mask="'##/##/####'"></v-text-field>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col col="12" md="4">
-              <v-autocomplete
-                v-model="filtro.conta_id"
-                :items="contas"
-                outlined
-                dense
-                chips
-                small-chips
-                label="Contas"
-                multiple
-              ></v-autocomplete>
-            </v-col>
-            <v-col col="12" md="4">
-              <v-autocomplete
-                v-model="filtro.fluxo_id"
-                :items="fluxos"
-                outlined
-                dense
-                chips
-                small-chips
-                label="Fluxos"
-                multiple
-              ></v-autocomplete>
-            </v-col>
-            <v-col col="12" md="4">
-              <v-autocomplete
-                v-model="filtro.status"
-                :items="status"
-                outlined
-                dense
-                chips
-                small-chips
-                label="Status"
-              ></v-autocomplete>
-            </v-col>
-          </v-row>
-        <v-divider></v-divider>
-          <div class="flex-grow-1"></div>
-          <v-btn color="primary" @click="getDados()">Filtrar</v-btn>
-      </v-expansion-panel-content>
-    </v-expansion-panel>
-  </v-expansion-panels>
+      <template>
+        <v-expansion-panels>
+          <v-expansion-panel v-for="(item,i) in 1" :key="i">
+            <v-expansion-panel-header class="title">Filtros</v-expansion-panel-header>
+            <v-expansion-panel-content>
+              <v-row>
+                <v-col col="12" md="2">
+                  <v-text-field
+                    v-model="filtro.datainicio"
+                    label="Data Inicio"
+                    v-mask="'##/##/####'"
+                  ></v-text-field>
+                </v-col>
+                <v-col col="12" md="2">
+                  <v-text-field v-model="filtro.datafinal" label="Data Final" v-mask="'##/##/####'"></v-text-field>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col col="12" md="4">
+                  <v-autocomplete
+                    v-model="filtro.conta_id"
+                    :items="contas"
+                    outlined
+                    dense
+                    chips
+                    small-chips
+                    label="Contas"
+                    multiple
+                  ></v-autocomplete>
+                </v-col>
+                <v-col col="12" md="4">
+                  <v-autocomplete
+                    v-model="filtro.fluxo_id"
+                    :items="fluxos"
+                    outlined
+                    dense
+                    chips
+                    small-chips
+                    label="Fluxos"
+                    multiple
+                  ></v-autocomplete>
+                </v-col>
+                <v-col col="12" md="4">
+                  <v-autocomplete
+                    v-model="filtro.status"
+                    :items="status"
+                    outlined
+                    dense
+                    chips
+                    small-chips
+                    label="Status"
+                  ></v-autocomplete>
+                </v-col>
+              </v-row>
+              <v-divider></v-divider>
+              <div class="flex-grow-1"></div>
+              <v-btn color="primary" @click="getDados()">Filtrar</v-btn>
+            </v-expansion-panel-content>
+          </v-expansion-panel>
+        </v-expansion-panels>
+      </template>
+    </v-col>
+  </v-container>
 </template>
     </v-col>
     <v-row>
@@ -76,11 +79,15 @@
         <table-component :titulo="`Previsão do Fechamento ${saldoComputed}`" :headers="headers" :items="titulos">
         
         <template v-slot:acoes="{ item }">
-           <v-icon v-if="item.status == 'Aberto'" class="mr-2" @click="atualizar(item.id)">mdi-table-edit</v-icon>
-            <v-icon v-if="item.status == 'Aberto'" class="mr-2" @click="showModalDelete(item)">mdi-delete</v-icon>
-            <v-icon v-if="item.status == 'Aberto'" class="mr-2" @click="showModalBaixaTitulo(item)">mdi-checkbox-marked-circle</v-icon>
-            <v-icon v-if="item.status == 'Pago'"   class="mr-2" @click="showModalCancelaBaixa(item)">mdi-update</v-icon>
-        </template>
+  <v-icon v-if="item.status == 'Aberto'" class="mr-2" @click="atualizar(item.id)">mdi-table-edit</v-icon>
+  <v-icon v-if="item.status == 'Aberto'" class="mr-2" @click="showModalDelete(item)">mdi-delete</v-icon>
+  <v-icon
+    v-if="item.status == 'Aberto'"
+    class="mr-2"
+    @click="showModalBaixaTitulo(item)"
+  >mdi-checkbox-marked-circle</v-icon>
+  <v-icon v-if="item.status == 'Pago'" class="mr-2" @click="showModalCancelaBaixa(item)">mdi-update</v-icon>
+</template>
         </table-component>
       </v-card>
     </v-col>
@@ -122,18 +129,25 @@ import TableComponent from "@/components/table/TableComponent";
 import ContaService from "@/service/Conta/ContaService";
 import TituloService from "@/service/Titulo/TituloService";
 import FluxoService from "@/service/Fluxo/FluxoService";
-import InfoComponent from './InfoComponent'
+import InfoComponent from "./InfoComponent";
 
 export default {
   name: "Titulo",
-  components: { ModalDelete,  ModalBaixaTitulo,ModalCancelaBaixa,TableComponent,TitleComponent, InfoComponent },
+  components: {
+    ModalDelete,
+    ModalBaixaTitulo,
+    ModalCancelaBaixa,
+    TableComponent,
+    TitleComponent,
+    InfoComponent
+  },
   data() {
     return {
       informacoes: [],
-      
-      ContaService : new ContaService(),
-      TituloService : new TituloService(),
-      FluxoService : new FluxoService(),
+
+      ContaService: new ContaService(),
+      TituloService: new TituloService(),
+      FluxoService: new FluxoService(),
       filtro: {},
       headers: [
         {
@@ -144,7 +158,7 @@ export default {
           text: "Vencimento",
           value: "vencimento"
         },
-         {
+        {
           text: "Dias Atraso",
           value: "diasatraso"
         },
@@ -176,7 +190,7 @@ export default {
           text: "Status",
           value: "status"
         },
-         {
+        {
           text: "Data Pagamento",
           value: "data_pagamento"
         },
@@ -188,7 +202,7 @@ export default {
       contas: [],
       fluxos: [],
       titulos: [],
-      status : ['Aberto','Pago'],
+      status: ["Aberto", "Pago"],
       valid: false,
       show: false,
       titulo: {},
@@ -196,23 +210,23 @@ export default {
       showModalBaixaTit: false,
       tituloCancelaBaixa: {},
       showModalCancelaBaixaTit: false,
-      saldoAtual: 0,      
+      saldoAtual: 0
     };
   },
   methods: {
-    fecharModalBaixaTitulo(){
-      this.showModalBaixaTit = false
-      this.getDados()
+    fecharModalBaixaTitulo() {
+      this.showModalBaixaTit = false;
+      this.getDados();
     },
-      fecharModalCancelaBaixa(){
-      this.showModalCancelaBaixaTit = false
-      this.getDados()
+    fecharModalCancelaBaixa() {
+      this.showModalCancelaBaixaTit = false;
+      this.getDados();
     },
     showModalDelete(item) {
       this.titulo = item;
       this.show = true;
     },
-     showModalBaixaTitulo(item) {
+    showModalBaixaTitulo(item) {
       this.tituloBaixaTitulo = item;
       this.showModalBaixaTit = true;
     },
@@ -223,48 +237,48 @@ export default {
     atualizar(id) {
       this.$router.push({ path: `/titulos/editar/${id}` });
     },
-      async deletar(item) {
+    async deletar(item) {
       await this.TituloService.remove(item.id);
       this.$toasted.global.defaultSuccess();
       this.getDados();
     },
     async getDados() {
-    const data = await this.TituloService.search(this.filtro)
-    this.titulos = data
-    this.getInformacoesDados()
+      const data = await this.TituloService.search(this.filtro);
+      this.titulos = data;
+      this.getInformacoesDados();
     },
-    
+
     async getContasDados() {
-      const data = await this.ContaService.list()
-      this.contas = data.map(item=>{
-        return {text: item.descricao, value: item.id}
-      })
+      const data = await this.ContaService.list();
+      this.contas = data.map(item => {
+        return { text: item.descricao, value: item.id };
+      });
     },
     async getFluxosDados() {
-      const data = await this.FluxoService.list()
-      this.fluxos = data.map(item=>{
-        return {text: item.descricao, value: item.id}
-      })
+      const data = await this.FluxoService.list();
+      this.fluxos = data.map(item => {
+        return { text: item.descricao, value: item.id };
+      });
     },
     async getInformacoesDados() {
-      const data = await this.TituloService.search({informacoes : true})
-      console.log(data)
-      this.informacoes =  data 
-    },
+      const data = await this.TituloService.search({ informacoes: true });
+      console.log(data);
+      this.informacoes = data;
+    }
   },
 
   computed: {
     saldoComputed() {
-       let total = this.titulos.reduce((total, elem) => {
-        if (elem.tipo == "Debito" ) {
+      let total = this.titulos.reduce((total, elem) => {
+        if (elem.tipo == "Debito") {
           return total - parseFloat(elem.valor);
-        } 
-        if (elem.tipo == "Credito" ) {
+        }
+        if (elem.tipo == "Credito") {
           return total + parseFloat(elem.valor);
         }
       }, 0);
       return this.$options.filters.dinheiro(total);
-    },
+    }
   },
 
   created() {
