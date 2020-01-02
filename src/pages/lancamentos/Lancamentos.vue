@@ -80,8 +80,9 @@
         <v-data-table
           :headers="headers"
           :items="lancamentos"
-          hide-default-footer
+        
           class="elevation-1"
+          :items-per-page="10"
         >
           <template v-slot:top>
             <v-toolbar flat>
@@ -96,12 +97,14 @@
           <template v-slot:item.valor="{ item }">
             {{item.valor | dinheiro}}
           </template>
-           <template v-slot:item.valor="{ item }">
-            {{item.valor | dinheiro}}
-          </template>
+          
 
           <template v-slot:item.saldo="{ item }">
             {{item.saldo | dinheiro}}
+          </template>
+
+          <template v-slot:item.data_lancamento="{ item }">
+            {{item.data_lancamento | data}}
           </template>
              
              <template v-slot:item.titulo_id="{ item }">
@@ -126,16 +129,20 @@
 </template>
 <script>
 import ModalDelete from "@/components/modal/ModalDelete";
-import urlApi from "@/config/urlApi";
-import queryString from "query-string";
 import TitleComponent from '@/components/title/TitleComponent'
-//import TableComponent from "@/components/table/TableComponent";
+import LancamentoService from '@/service/lancamento/LancamentoService'
+import FluxoService from '@/service/Fluxo/FluxoService'
+import ContaService from '@/service/Conta/ContaService'
 
 export default {
   name: "Lancamento",
   components: { ModalDelete, TitleComponent },
   data() {
     return {
+      LancamentoService : new LancamentoService(),
+      FluxoService : new FluxoService(),
+      ContaService : new ContaService(),
+      
       filtro: {},
       headers: [
         {
@@ -188,48 +195,34 @@ export default {
       saldoAtual: 0
     };
   },
+
   methods: {
-   
     getColor(tipo) {
       if (tipo == "Debito") return "red";
       else return "green";
     },
-
-    showModal(item) {
+  showModal(item) {
       this.lancamento = item;
       this.show = true;
     },
     atualizar(id) {
       this.$router.push({ path: `/lancamentos/editar/${id}` });
     },
-    deletar(item) {
-      const url = `${urlApi}lancamentos/${item.id}`;
-      this.$http.delete(url).then(() => {
-        this.getDados();
-        this.$store.dispatch("setAlert", {
-          show: true,
-          mensagem: "Excluido com sucesso",
-          type: "error"
-        });
-      });
+    async deletar(item) {
+      await this.LancamentoService.remove(item.id);
+      this.$toasted.global.defaultSuccess();
+      this.getDados();
     },
-    getDados() {
-      const filtros = queryString.stringify(this.filtro);
-      const url = `${urlApi}lancamentos?${filtros}`;
-      this.$http
-        .get(url)
-        .then(res => {
-          this.lancamentos = res.data;
-          let saldoAtt = 0;
+    async getDados() {
+     const data = await this.LancamentoService.search(this.filtro)
+          this.lancamentos = data;
+          let saldoAtt = 0;  
           let arrayData = [];
-          res.data.forEach(r => {
+          data.forEach(r => {
             arrayData.push(r);
           });
-
           arrayData.reverse();
-
           let new_index = arrayData.length - 1;
-
           arrayData.map((current_val, index) => {
             if (current_val.tipo == "Credito") {
               saldoAtt = parseFloat(saldoAtt) + parseFloat(current_val.valor);
@@ -245,40 +238,24 @@ export default {
             return current_val;
           });
           this.lancamentos.reverse()
-        })
-        .catch(erro => (this.erro = erro));
     },
-    getContasDados() {
-      this.$http
-        .get(`${urlApi}contas`)
-        .then(res => {
-          this.contas = res.data.map(item => {
+    async getContasDados() {
+    const data = await this.ContaService.list()
+      this.contas = data.map(item => {
             return { text: item.descricao, value: item.id };
           });
-        })
-        .catch(erro => {
-          this.erro = erro;
-        });
     },
-    getFluxosDados() {
-      this.$http
-        .get(`${urlApi}fluxos`)
-        .then(res => {
-          this.fluxos = res.data.map(item => {
+    async getFluxosDados() {
+      const data = await this.FluxoService.list()
+      console.log(data)
+      this.fluxos = data.map(item => {
             return { text: item.descricao, value: item.id };
           });
-        })
-        .catch(erro => {
-          this.erro = erro;
-        });
     }
   },
-  computed: {
-    alertComputed() {
-      return this.$store.state.alert;
-    },
+
+computed: {
     totalComputed() {
-      // if(this.item)
       return this.lancamentos.reduce((total, elem) => {
         if (elem.tipo == "Debito") {
           return total - parseFloat(elem.valor);

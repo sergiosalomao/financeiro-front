@@ -6,8 +6,9 @@
         <v-card>
           <v-card-text>
             <v-form ref="form" v-model="valid" lazy-validation>
-              <v-text-field v-model="banco.numero" label="Numero"></v-text-field>
-              <v-text-field v-model="banco.descricao" label="Banco"></v-text-field>
+              <v-text-field outlined v-model="banco.numero" label="Numero"></v-text-field>
+              <v-text-field outlined v-model="banco.descricao" label="Banco"></v-text-field>
+              <v-btn color="primary" class="mr-4" @click="$router.go(-1)">Voltar</v-btn>
               <v-btn :disabled="!valid" color="success" class="mr-4" @click="atualizar">Gravar</v-btn>
             </v-form>
           </v-card-text>
@@ -17,7 +18,7 @@
   </v-container>
 </template>
 <script>
-import BancoService from '@/service/Banco/BancoService'
+import BancoService from "@/service/Banco/BancoService";
 export default {
   data() {
     return {
@@ -26,15 +27,16 @@ export default {
       valid: false
     };
   },
+  
   methods: {
     async atualizar() {
-      await this.BancoService.createOrUpdate(this.banco)
+      await this.BancoService.createOrUpdate(this.banco);
       this.$toasted.global.defaultSuccess();
       this.$router.push({ path: `/bancos/` });
     },
     async getDados(id) {
-      const data = await this.BancoService.show(id)
-      this.banco = data
+      const data = await this.BancoService.show(id);
+      this.banco = data;
     }
   },
   mounted() {

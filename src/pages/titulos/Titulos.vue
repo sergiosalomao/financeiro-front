@@ -87,6 +87,7 @@
       <v-card>
         <title-component titulo="Titulos" />
         <table-component :titulo="`Previsão do Fechamento ${saldoComputed}`" :headers="headers" :items="titulos">
+        
         <template v-slot:acoes="{ item }">
            <v-icon v-if="item.status == 'Aberto'" class="mr-2" @click="atualizar(item.id)">mdi-table-edit</v-icon>
             <v-icon v-if="item.status == 'Aberto'" class="mr-2" @click="showModalDelete(item)">mdi-delete</v-icon>
@@ -97,15 +98,8 @@
       </v-card>
     </v-col>
     <v-col cols="12" md="2" sm="6">
-      <!-- <v-card>
-        <v-card-title>Informações</v-card-title>
-        <v-list-item v-for="(item, index) in informacoes" :key="index">
-          <v-list-item-content>
-            <v-list-item-title>{{item.text}}: {{item.value}}</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-      </v-card> -->
-      <lista-component :dados="informacoes" /> 
+  
+      <info-component :dados="informacoes" /> 
     </v-col>
   </v-row>
     <modal-delete
@@ -135,24 +129,31 @@
 import ModalDelete from "@/components/modal/ModalDelete";
 import ModalBaixaTitulo from "@/components/modal/ModalBaixaTitulo";
 import ModalCancelaBaixa from "@/components/modal/ModalCancelaBaixa";
-import urlApi from "@/config/urlApi";
+
 import TitleComponent from "@/components/title/TitleComponent";
 import TableComponent from "@/components/table/TableComponent";
 import ContaService from "@/service/Conta/ContaService";
 import TituloService from "@/service/Titulo/TituloService";
 import FluxoService from "@/service/Fluxo/FluxoService";
-import ListaComponent from './ListaComponent'
+import InfoComponent from "./InfoComponent";
 
 export default {
   name: "Titulo",
-  components: { ModalDelete,  ModalBaixaTitulo,ModalCancelaBaixa,TableComponent,TitleComponent, ListaComponent },
+  components: {
+    ModalDelete,
+    ModalBaixaTitulo,
+    ModalCancelaBaixa,
+    TableComponent,
+    TitleComponent,
+    InfoComponent
+  },
   data() {
     return {
       informacoes: [],
-      
-      ContaService : new ContaService(),
-      TituloService : new TituloService(),
-      FluxoService : new FluxoService(),
+
+      ContaService: new ContaService(),
+      TituloService: new TituloService(),
+      FluxoService: new FluxoService(),
       filtro: {},
       headers: [
         {
@@ -163,7 +164,7 @@ export default {
           text: "Vencimento",
           value: "vencimento"
         },
-         {
+        {
           text: "Dias Atraso",
           value: "diasatraso"
         },
@@ -196,6 +197,10 @@ export default {
           value: "status"
         },
         {
+          text: "Data Pagamento",
+          value: "data_pagamento"
+        },
+        {
           text: "Ações",
           value: "action"
         }
@@ -212,24 +217,23 @@ export default {
       showModalBaixaTit: false,
       tituloCancelaBaixa: {},
       showModalCancelaBaixaTit: false,
-      saldoAtual: 0,
-      
+      saldoAtual: 0
     };
   },
   methods: {
-    fecharModalBaixaTitulo(){
-      this.showModalBaixaTit = false
-      this.getDados()
+    fecharModalBaixaTitulo() {
+      this.showModalBaixaTit = false;
+      this.getDados();
     },
-      fecharModalCancelaBaixa(){
-      this.showModalCancelaBaixaTit = false
-      this.getDados()
+    fecharModalCancelaBaixa() {
+      this.showModalCancelaBaixaTit = false;
+      this.getDados();
     },
     showModalDelete(item) {
       this.titulo = item;
       this.show = true;
     },
-     showModalBaixaTitulo(item) {
+    showModalBaixaTitulo(item) {
       this.tituloBaixaTitulo = item;
       this.showModalBaixaTit = true;
     },
@@ -240,54 +244,59 @@ export default {
     atualizar(id) {
       this.$router.push({ path: `/titulos/editar/${id}` });
     },
-    deletar(item) {
-      const url = `${urlApi}titulos/${item.id}`;
-      this.$http.delete(url).then(() => {
-        this.getDados();
-        this.$store.dispatch("setAlert", {
-          show: true,
-          mensagem: "Excluido com sucesso",
-          type: "error"
-        });
-      });
+    async deletar(item) {
+      await this.TituloService.remove(item.id);
+      this.$toasted.global.defaultSuccess();
+      this.getDados();
     },
     async getDados() {
+<<<<<<< HEAD
       console.log(this.filtro)
     const data = await this.TituloService.search(this.filtro)
     this.titulos = data.dados
     this.informacoes =  data.total 
-    },
-    
-    async getContasDados() {
-      const data = await this.ContaService.list()
-      this.contas = data.map(item=>{
-        return {text: item.descricao, value: item.id}
-      })
-      
-    },
-    
-    async getFluxosDados() {
-      const data = await this.FluxoService.list()
-      this.fluxos = data.map(item=>{
-        return {text: item.descricao, value: item.id}
-      })
+=======
+      const data = await this.TituloService.search(this.filtro);
+      this.titulos = data;
+      this.getInformacoesDados();
+>>>>>>> b94ee7158c84c9b3dfd53d5bdcf37cd0d73d760d
     },
 
+    async getContasDados() {
+      const data = await this.ContaService.list();
+      this.contas = data.map(item => {
+        return { text: item.descricao, value: item.id };
+      });
+    },
+    async getFluxosDados() {
+      const data = await this.FluxoService.list();
+      this.fluxos = data.map(item => {
+        return { text: item.descricao, value: item.id };
+      });
+    },
+<<<<<<< HEAD
+
+=======
+    async getInformacoesDados() {
+      const data = await this.TituloService.search({ informacoes: true });
+      console.log(data);
+      this.informacoes = data;
+    }
+>>>>>>> b94ee7158c84c9b3dfd53d5bdcf37cd0d73d760d
   },
+
   computed: {
     saldoComputed() {
-       let total = this.titulos.reduce((total, elem) => {
-        if (elem.tipo == "Debito" ) {
+      let total = this.titulos.reduce((total, elem) => {
+        if (elem.tipo == "Debito") {
           return total - parseFloat(elem.valor);
-        } 
-
-        if (elem.tipo == "Credito" ) {
+        }
+        if (elem.tipo == "Credito") {
           return total + parseFloat(elem.valor);
         }
-        
       }, 0);
       return this.$options.filters.dinheiro(total);
-    },
+    }
   },
 
   created() {

@@ -1,5 +1,5 @@
 <template>
-  <v-data-table :headers="headers" :items="items" hide-default-footer class="elevation-1">
+  <v-data-table :headers="headers" :items="items"  :items-per-page="10" class="elevation-1">
     <template v-slot:top>
             <v-toolbar flat>
               <div class="flex-grow-2"></div>
@@ -20,7 +20,10 @@
     </template>
     <template v-slot:item.vencimento="{ item }">{{item.vencimento | data}}</template>
     <template v-slot:item.valor="{ item }">{{item.valor | dinheiro}}</template>
-    <template v-slot:item.saldo="{ item }">{{item.saldo | dinheiro}}</template>
+    <template v-slot:item.saldo="{ dinheiro}">{{item.saldo | dinheiro}}</template>
+    <template v-slot:item.data_pagamento="{ item }">
+      <v-text v-if="item.status == 'Pago'">{{item.data_pagamento | data}}</v-text>
+      </template>
   </v-data-table>
 </template>
 <script>

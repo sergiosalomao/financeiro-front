@@ -34,8 +34,6 @@ export default new Vuex.Store({
             commit('auth_logout')
         },
         setAlert({ commit }, alert) {
-            // eslint-disable-next-line no-console
-            console.log(alert)
             commit('setAlert', alert)
             setTimeout(() => {
                 commit('fecharMensagem')
