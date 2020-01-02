@@ -53,9 +53,11 @@ export default class API {
   }
 
   search = async (params = {}) => {
-    const queryString = this.queryString.stringify(params);
+    
+    const queryString = require('query-string');
+    const queryString2 = this.queryString.stringify(params);
     try {
-      const response = await http.get(`${this.api}/?${queryString}`)
+      const response = await http.get(`${this.api}/?${queryString2}`)
       return response.data
     } catch (error) {
       throw ResponseService(error, 'get', 'item')

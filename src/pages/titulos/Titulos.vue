@@ -25,7 +25,7 @@
             </v-col>
           </v-row>
           <v-row>
-            <v-col col="12" md="4">
+            <v-col col="12" md="2">
               <v-autocomplete
                 v-model="filtro.conta_id"
                 :items="contas"
@@ -35,9 +35,21 @@
                 small-chips
                 label="Contas"
                 multiple
+                
               ></v-autocomplete>
             </v-col>
-            <v-col col="12" md="4">
+             <v-col col="12" md="2">
+              <v-autocomplete
+                v-model="filtro.tipo"
+                :items="tipo"
+                outlined
+                dense
+                chips
+                small-chips
+                label="Tipo"
+              ></v-autocomplete>
+            </v-col>
+            <v-col col="12" md="6">
               <v-autocomplete
                 v-model="filtro.fluxo_id"
                 :items="fluxos"
@@ -47,9 +59,10 @@
                 small-chips
                 label="Fluxos"
                 multiple
+                
               ></v-autocomplete>
             </v-col>
-            <v-col col="12" md="4">
+            <v-col col="12" md="2">
               <v-autocomplete
                 v-model="filtro.status"
                 :items="status"
@@ -190,6 +203,7 @@ export default {
       contas: [],
       fluxos: [],
       titulos: [],
+      tipo : ['Debito','Credito'],
       status : ['Aberto','Pago'],
       valid: false,
       show: false,
@@ -238,9 +252,10 @@ export default {
       });
     },
     async getDados() {
+      console.log(this.filtro)
     const data = await this.TituloService.search(this.filtro)
-    this.titulos = data
-    this.getInformacoesDados()
+    this.titulos = data.dados
+    this.informacoes =  data.total 
     },
     
     async getContasDados() {
@@ -257,12 +272,7 @@ export default {
         return {text: item.descricao, value: item.id}
       })
     },
-    async getInformacoesDados() {
-      const data = await this.TituloService.search({informacoes : true})
-      console.log(data)
-      this.informacoes =  data 
-    },
-    
+
   },
   computed: {
     saldoComputed() {
@@ -284,7 +294,6 @@ export default {
     this.getDados();
     this.getContasDados();
     this.getFluxosDados();
-    this.getInformacoesDados();
   }
 };
 </script>
