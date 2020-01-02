@@ -2,7 +2,7 @@ import axios from 'axios'
 
 export const http = axios.create({
   // baseURL: `${process.env.VUE_APP_HOST}`
-  baseURL: 'http://192.168.0.100:8001/api/'
+  baseURL: 'http://localhost:8001/api/'
 })
 http.interceptors.request.use((config) => {
   const token =  window.localStorage.getItem('access_token')

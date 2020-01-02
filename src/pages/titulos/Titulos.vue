@@ -250,16 +250,10 @@ export default {
       this.getDados();
     },
     async getDados() {
-<<<<<<< HEAD
-      console.log(this.filtro)
-    const data = await this.TituloService.search(this.filtro)
-    this.titulos = data.dados
-    this.informacoes =  data.total 
-=======
-      const data = await this.TituloService.search(this.filtro);
-      this.titulos = data;
-      this.getInformacoesDados();
->>>>>>> b94ee7158c84c9b3dfd53d5bdcf37cd0d73d760d
+      const data = await this.TituloService.search(this.filtro)
+      console.log(data)
+      this.titulos = data.dados
+      this.informacoes =  data.total 
     },
 
     async getContasDados() {
@@ -274,20 +268,17 @@ export default {
         return { text: item.descricao, value: item.id };
       });
     },
-<<<<<<< HEAD
 
-=======
     async getInformacoesDados() {
       const data = await this.TituloService.search({ informacoes: true });
       console.log(data);
       this.informacoes = data;
     }
->>>>>>> b94ee7158c84c9b3dfd53d5bdcf37cd0d73d760d
   },
 
   computed: {
     saldoComputed() {
-      let total = this.titulos.reduce((total, elem) => {
+        let total = this.titulos.reduce((total, elem) => {
         if (elem.tipo == "Debito") {
           return total - parseFloat(elem.valor);
         }
@@ -296,7 +287,7 @@ export default {
         }
       }, 0);
       return this.$options.filters.dinheiro(total);
-    }
+      }
   },
 
   created() {

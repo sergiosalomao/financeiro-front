@@ -54,10 +54,12 @@ export default class API {
 
   search = async (params = {}) => {
     
-    const queryString = require('query-string');
-    const queryString2 = this.queryString.stringify(params);
+    const filter = this.teste(params)
+    let a = filter.toString().split(',').join('&');
+    console.log(a);
+    // const queryString2 = this.queryString.stringify(params);
     try {
-      const response = await http.get(`${this.api}/?${queryString2}`)
+      const response = await http.get(`${this.api}/?${a}`)
       return response.data
     } catch (error) {
       throw ResponseService(error, 'get', 'item')
@@ -74,5 +76,15 @@ export default class API {
     } catch (error) {
       throw ResponseService(error, 'create')
     }
+  }
+
+  teste = (params) => {
+    return Object.keys(params).map(key => {
+      if (Array.isArray(params[key])) {
+        return params[key].map((value) => `${key}[]=${value}`).join('&')
+      } else {
+        return `${key}=${params[key]}`
+      }
+    })
   }
 }
