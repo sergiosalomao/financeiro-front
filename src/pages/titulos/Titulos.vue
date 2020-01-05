@@ -47,6 +47,8 @@
                 chips
                 small-chips
                 label="Tipo"
+                multiple
+                
               ></v-autocomplete>
             </v-col>
             <v-col col="12" md="6">

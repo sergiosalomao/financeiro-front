@@ -28,7 +28,7 @@
             </v-col>
           </v-row>
           <v-row>
-            <v-col col="12" md="6">
+            <v-col col="3" md="3">
               <v-autocomplete
                 v-model="filtro.conta_id"
                 :items="contas"
@@ -38,6 +38,18 @@
                 small-chips
                 label="Contas"
                 multiple
+              ></v-autocomplete>
+            </v-col>
+             <v-col col="3" md="3">
+              <v-autocomplete
+                v-model="filtro.tipo"
+                :items="tipo"
+                outlined
+                dense
+                chips
+                small-chips
+                label="Tipo"
+                 multiple
               ></v-autocomplete>
             </v-col>
             <v-col col="12" md="6">
@@ -183,6 +195,7 @@ export default {
           value: "action"
         }
       ],
+      tipo : ['Debito','Credito'],
       contas: [],
       fluxos: [],
       lancamentos: [],
