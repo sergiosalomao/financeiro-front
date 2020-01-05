@@ -25,7 +25,7 @@
             </v-col>
           </v-row>
           <v-row>
-            <v-col col="12" md="4">
+            <v-col col="12" md="2">
               <v-autocomplete
                 v-model="filtro.conta_id"
                 :items="contas"
@@ -35,9 +35,23 @@
                 small-chips
                 label="Contas"
                 multiple
+                
               ></v-autocomplete>
             </v-col>
-            <v-col col="12" md="4">
+             <v-col col="12" md="2">
+              <v-autocomplete
+                v-model="filtro.tipo"
+                :items="tipo"
+                outlined
+                dense
+                chips
+                small-chips
+                label="Tipo"
+                multiple
+                
+              ></v-autocomplete>
+            </v-col>
+            <v-col col="12" md="6">
               <v-autocomplete
                 v-model="filtro.fluxo_id"
                 :items="fluxos"
@@ -47,9 +61,10 @@
                 small-chips
                 label="Fluxos"
                 multiple
+                
               ></v-autocomplete>
             </v-col>
-            <v-col col="12" md="4">
+            <v-col col="12" md="2">
               <v-autocomplete
                 v-model="filtro.status"
                 :items="status"
@@ -195,7 +210,8 @@ export default {
       contas: [],
       fluxos: [],
       titulos: [],
-      status: ["Aberto", "Pago"],
+      tipo : ['Debito','Credito'],
+      status : ['Aberto','Pago'],
       valid: false,
       show: false,
       titulo: {},
@@ -236,9 +252,10 @@ export default {
       this.getDados();
     },
     async getDados() {
-      const data = await this.TituloService.search(this.filtro);
-      this.titulos = data;
-      this.getInformacoesDados();
+      const data = await this.TituloService.search(this.filtro)
+      console.log(data)
+      this.titulos = data.dados
+      this.informacoes =  data.total 
     },
 
     async getContasDados() {
@@ -253,6 +270,7 @@ export default {
         return { text: item.descricao, value: item.id };
       });
     },
+
     async getInformacoesDados() {
       const data = await this.TituloService.search({ informacoes: true });
       console.log(data);
@@ -262,7 +280,7 @@ export default {
 
   computed: {
     saldoComputed() {
-      let total = this.titulos.reduce((total, elem) => {
+        let total = this.titulos.reduce((total, elem) => {
         if (elem.tipo == "Debito") {
           return total - parseFloat(elem.valor);
         }
@@ -271,14 +289,13 @@ export default {
         }
       }, 0);
       return this.$options.filters.dinheiro(total);
-    }
+      }
   },
 
   created() {
     this.getDados();
     this.getContasDados();
     this.getFluxosDados();
-    this.getInformacoesDados();
   }
 };
 </script>

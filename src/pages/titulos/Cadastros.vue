@@ -134,7 +134,8 @@ export default {
           });
     },
     async getCedentesDados() {
-      const data = await this.CedenteService.lsit()
+      const data = await this.CedenteService.list()
+      console.log(data);
       this.cedentes = data.map(item => {
             return { text: item.descricao, value: item.id };
           });

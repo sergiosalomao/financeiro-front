@@ -28,7 +28,7 @@
             </v-col>
           </v-row>
           <v-row>
-            <v-col col="12" md="6">
+            <v-col col="3" md="3">
               <v-autocomplete
                 v-model="filtro.conta_id"
                 :items="contas"
@@ -38,6 +38,18 @@
                 small-chips
                 label="Contas"
                 multiple
+              ></v-autocomplete>
+            </v-col>
+             <v-col col="3" md="3">
+              <v-autocomplete
+                v-model="filtro.tipo"
+                :items="tipo"
+                outlined
+                dense
+                chips
+                small-chips
+                label="Tipo"
+                 multiple
               ></v-autocomplete>
             </v-col>
             <v-col col="12" md="6">
@@ -57,12 +69,7 @@
         <v-divider></v-divider>
      
           <div class="flex-grow-1"></div>
-          <v-btn color="primary" @click="getDados()">Filtrar</v-btn>
-  
-
-
-
-
+          <v-btn color="primary" @click.prevent="getDados(filtro)">Filtrar</v-btn>
 
       </v-expansion-panel-content>
     </v-expansion-panel>
@@ -134,6 +141,8 @@ import LancamentoService from '@/service/lancamento/LancamentoService'
 import FluxoService from '@/service/Fluxo/FluxoService'
 import ContaService from '@/service/Conta/ContaService'
 
+// import queryString from 'querystring'
+
 export default {
   name: "Lancamento",
   components: { ModalDelete, TitleComponent },
@@ -186,6 +195,7 @@ export default {
           value: "action"
         }
       ],
+      tipo : ['Debito','Credito'],
       contas: [],
       fluxos: [],
       lancamentos: [],
@@ -213,8 +223,8 @@ export default {
       this.$toasted.global.defaultSuccess();
       this.getDados();
     },
-    async getDados() {
-     const data = await this.LancamentoService.search(this.filtro)
+    async getDados(filtro) {
+     const data = await this.LancamentoService.search(filtro)
           this.lancamentos = data;
           let saldoAtt = 0;  
           let arrayData = [];
