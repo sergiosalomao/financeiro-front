@@ -13,7 +13,7 @@
 <br>
 <h4>ScreenShots</h4>
   <div>
-          <img src="https://github.com/sergiosalomao/financeiro-front/blob/master/screenshots/screen.png">
+          <img src="https://github.com/sergiosalomao/financeiro-front/blob/master/screenshots/screen1.png">
         <br>
         <img src="https://github.com/sergiosalomao/financeiro-front/blob/master/screenshots/screen2.png">
         <br>
